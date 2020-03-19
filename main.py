@@ -51,6 +51,7 @@ def get_access_token():
     return access_token
 
 
+# Gets a user's top 10 artists
 def get_top_artist_data(authorization_header, time_range, limit, offset):
     # GET user top artist data
     top_artist_endpoint = "{}/me/top/artists?time_range={}&limit={}&offset={}".format(base_url, time_range, limit, offset) 
@@ -60,6 +61,7 @@ def get_top_artist_data(authorization_header, time_range, limit, offset):
     return top_artist_data
 
 
+# Gets a user's top 10 tracks
 def get_top_tracks_data(authorization_header, time_range, limit, offset):
     # GET user top artist data
     top_tracks_endpoint = "{}/me/top/tracks?time_range={}&limit={}&offset={}".format(base_url, time_range, limit, offset) 
@@ -91,13 +93,13 @@ def display_top_data():
     return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data)
 
 
-# @app.route("/top-tracks-by-artist")
-# def display_top_tracks_by_artist():
-#     # Obtain an access token and use it to access the Spotify API
-#     access_token = get_access_token()
-#     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
+@app.route("/top-tracks-by-artist")
+def display_top_tracks_by_artist():
+    # Obtain an access token and use it to access the Spotify API
+    access_token = get_access_token()
+    authorization_header = {"Authorization": "Bearer {}".format(access_token)}
 
-#     return render_template("index.html")
+    return render_template("index.html")
 
 # Run the server
 if __name__ == "__main__":
