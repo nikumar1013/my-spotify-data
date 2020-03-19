@@ -19,18 +19,7 @@ def get_top_tracks(data):
     return tracks
 
 # Returns a python dictionary with the top 50 tracks grouped by the artist
-def get_top_tracks_by_artist(range):
-	dic = {}
-	if token:
-		sp = spotipy.Spotify(auth=token)
-		track_data = sp.current_user_top_tracks(limit=50, offset=0, time_range=range)
-		artist_data = sp.current_user_top_artists(limit=10, offset=0, time_range=range)
-		for item in artist_data['items']:
-			top_artist = item['name']
-			lst = []
-			for item in track_data['items']:
-				track_artist = item['artists'][0]['name']
-				if top_artist == track_artist:
-					lst.append(item['name'])
-			dic[top_artist] = lst
-	return dic
+def get_top_tracks_by_artist(data):
+	tracks = []
+	print(data)
+	return tracks

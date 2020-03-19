@@ -71,6 +71,13 @@ def get_top_tracks_data(authorization_header, time_range, limit, offset):
     top_tracks_data = extract.get_top_tracks(data)
     return top_tracks_data
 
+def get_tracks_by_artist(authorization_header, time_range, limit, offset):
+    top_tracks_endpoint = "{}/me/top/tracks?time_range={}&limit={}&offset={}".format(base_url, time_range, limit, offset) 
+    top_tracks_response = requests.get(top_tracks_endpoint, headers=authorization_header)
+    data = json.loads(top_tracks_response.text)
+    result = extract.get_top_tracks_by_artist(data)
+    return result
+
 
 @app.route("/")
 def index():
@@ -99,9 +106,8 @@ def display_top_data():
 def display_top_tracks_by_artist():
     # Obtain an access token and use it to access the Spotify API
     access_token = temp_token
-    authorization_header = {"Authorization": "Bearer {}".format(access_token)}
-
-    dic = extract.get_top_tracks_by_artist('long_term',access_token)
+    authorization_header = {"Authorization": "Bearer {}".format(temp_token)}
+    dic = get_tracks_by_artist(authorization_header, 'long_term', '50', '0')
     return render_template("tracks.html", content=dic)
 
 # @app.route("/top-tracks-by-artist")
