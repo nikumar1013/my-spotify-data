@@ -10,16 +10,21 @@ def get_top_artists(data):
 
 # Returns a list of the user's top 10 tracks
 def get_top_tracks(data):
-    tracks = []
+    tracks = {}
     for item in data['items']:
         track_name = item['name']
         artist_name = item['artists'][0]['name']
-        list_entry = track_name + " - " + artist_name
-        tracks.append(list_entry)
+        tracks[track_name] = artist_name
     return tracks
 
 # Returns a python dictionary with the top 50 tracks grouped by the artist
-def get_top_tracks_by_artist(data):
-	tracks = []
-	print(data)
-	return tracks
+def get_top_tracks_by_artist(top_tracks, top_artists):
+    top_tracks_by_artist = {}
+    for artist in top_artists:
+        tracks = []
+        for track in top_tracks:
+            track_artist = top_tracks.get(track)
+            if artist == track_artist:
+                tracks.append(track)
+        top_tracks_by_artist[artist] = tracks
+    return top_tracks_by_artist
