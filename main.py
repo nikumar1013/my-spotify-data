@@ -100,8 +100,21 @@ def display_top_tracks_by_artist():
     # Obtain an access token and use it to access the Spotify API
     access_token = temp_token
     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
+
     dic = extract.get_top_tracks_by_artist('long_term',access_token)
     return render_template("tracks.html", content=dic)
+
+# @app.route("/top-tracks-by-artist")
+# def display_top_tracks_by_artist():
+#     # Obtain an access token and use it to access the Spotify API
+#     access_token = get_access_token()
+#     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
+
+#     # Retrieve top artist data and top track data 
+#     top_artist_data = get_top_artist_data(authorization_header, 'long_term', '10', '0')
+#     top_tracks_data = get_top_tracks_data(authorization_header, 'long_term', '50', '0')
+
+#     return render_template("index.html")
 
 # Run the server
 if __name__ == "__main__":
