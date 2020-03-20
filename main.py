@@ -126,19 +126,18 @@ def display_top_tracks_by_artist():
     # Obtain an access token and use it to access the Spotify API
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
-    if len(tracks_cache) == 0:
-        # Convert every id in the dictionary to a name
-        temp_dict = {}
-        for artist_id in top_tracks_by_artist_data:
-            temp_list = []
-            track_id_list = top_tracks_by_artist_data.get(artist_id)
-            for track_id in track_id_list:
-                track_name = convert_id_to_name(auth_header, 'tracks', track_id)
-                temp_list.append(track_name)
-            artist_name = convert_id_to_name(auth_header, 'artists', artist_id)
-            temp_dict[artist_name] = temp_list
-        top_tracks_by_artist_data = temp_dict
-        tracks_cache = top_tracks_by_artist_data
+    # Convert every id in the dictionary to a name
+    temp_dict = {}
+    for artist_id in top_tracks_by_artist_data:
+        temp_list = []
+        track_id_list = top_tracks_by_artist_data.get(artist_id)
+        for track_id in track_id_list:
+            track_name = convert_id_to_name(auth_header, 'tracks', track_id)
+            temp_list.append(track_name)
+        artist_name = convert_id_to_name(auth_header, 'artists', artist_id)
+        temp_dict[artist_name] = temp_list
+    top_tracks_by_artist_data = temp_dict
+    tracks_cache = top_tracks_by_artist_data
 
     # Render HTML with the desired data
     return render_template("tracks.html", content=top_tracks_by_artist_data)
