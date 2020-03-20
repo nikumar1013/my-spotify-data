@@ -4,7 +4,7 @@ def get_top_artists(data):
     artists = []
     items = data['items']
     for item in items:
-        artist_name = item['name']
+        artist_name = item['id']
         artists.append(artist_name)
     return artists
 
@@ -12,8 +12,8 @@ def get_top_artists(data):
 def get_top_tracks(data):
     tracks = {}
     for item in data['items']:
-        track_name = item['name']
-        artist_name = item['artists'][0]['name']
+        track_name = item['id']
+        artist_name = item['artists'][0]['id']
         tracks[track_name] = artist_name
     return tracks
 
