@@ -1,19 +1,19 @@
 
 # Returns a list of the user's top 10 artists
-def get_top_artists(data):
+def get_top_artists(data, tag):
     artists = []
     items = data['items']
     for item in items:
-        artist_name = item['id']
+        artist_name = item[tag]
         artists.append(artist_name)
     return artists
 
 # Returns a list of the user's top 10 tracks
-def get_top_tracks(data):
+def get_top_tracks(data, tag):
     tracks = {}
     for item in data['items']:
-        track_name = item['id']
-        artist_name = item['artists'][0]['id']
+        track_name = item[tag]
+        artist_name = item['artists'][0][tag]
         tracks[track_name] = artist_name
     return tracks
 
