@@ -11,11 +11,13 @@
     <title>Your Top Tracks Sorted By Artist</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
     <header>
     <h1>These are your top songs by artist</h1>
     {% for key in content %}
-    <small> {{ key }} <br> </small>]
+    <large>{{ key }}<br> </large>
+    {% for item in content[key] %}
+      <small>{{ item }} <br> </small>
+    {% endfor %}
     {% endfor %}
     </header>
 
