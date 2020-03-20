@@ -18,7 +18,7 @@ base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
 redirect_uri = "http://127.0.0.1:8080/home"
-scope = "user-top-read"
+scope = "user-top-read user-read-recently-played"
 
 # Query parameters for authorization
 auth_query = {
@@ -81,6 +81,13 @@ def get_top_tracks_by_artist(auth_header):
     result = extract.get_top_tracks_by_artist(top_tracks, top_artists)
     return result
 
+def get_recent_tracks_data(auth_header, limit, tag):
+    endpoint = "{}/me/player/recently-played?type={}&limit={}&after={}".format(base_url,'track', limit, '0')
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    recent_tracks_data = extract.get_recent_tracks(data, tag)
+    return recent_tracks_data
+
 # Initial route for user authentication with Spotify
 @app.route("/")
 def index():
@@ -100,6 +107,7 @@ def display_top_data():
     # Retrieve the top artist data and top tracks data
     top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', '0', 'name')
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', '0', 'name')
+    recent_tracks_data = get_recent_tracks_data(auth_header, '10', 'name')
 
     # # Convert every artist id in the list to an artist name
     # for i in range(len(top_artist_data)):
@@ -117,7 +125,8 @@ def display_top_data():
     # top_tracks_data = temp
 
     # Render HTML with the desired data
-    return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data)
+    return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,recent=recent_tracks_data)
+
 
 
 # Page for viewing top tracks grouped by artist

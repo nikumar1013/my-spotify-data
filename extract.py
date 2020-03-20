@@ -17,6 +17,15 @@ def get_top_tracks(data, tag):
         tracks[track_name] = artist_name
     return tracks
 
+
+def get_recent_tracks(data,tag):
+	recents = {}
+	for item in data['items']:
+		track_name = item['track'][tag]
+		artist_name = item['track']['artists'][0][tag]
+		recents[track_name] = artist_name
+	return recents
+
 # Returns a python dictionary with the top 50 tracks grouped by the artist
 def get_top_tracks_by_artist(top_tracks, top_artists):
     top_tracks_by_artist = {}

@@ -14,7 +14,7 @@
   <body>
   	<!-- NAVBAR CODE BELOW -->
 	 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	  <a class="navbar-brand" href="#">Navbar</a>
+	  <a class="navbar-brand" href="#">Spotify Data App</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
@@ -27,7 +27,7 @@
 	        <a class="nav-link" href="/top-tracks-by-artist">Your Top Tracks by Artist</a>
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">Listening Time by Genre</a>
+	        <a class="nav-link" href="#">Audio Analysis</a>
 	      </li>
 	      <li class="nav-item">
 	        <a class="nav-link" href="#">Your Personality Analysis</a>
@@ -48,10 +48,16 @@
 	<header>
 		<h4>These are your top 10 songs</h4>
 		{% for item in tracks %}
-		<small> {{ item }} <br> </small>
+		<small> {{ item }} by {{tracks[item]}}<br> </small>
 		{% endfor %}
 	</header>
 
+	<header>
+		<h4>These are your top 10 recently played tracks</h4>
+		{% for item in recent %}
+		<small> {{ item }} by {{recent[item]}}<br> </small>
+		{% endfor %}
+	</header>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
