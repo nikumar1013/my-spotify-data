@@ -26,5 +26,6 @@ def get_top_tracks_by_artist(top_tracks, top_artists):
             track_artist = top_tracks.get(track)
             if artist == track_artist:
                 tracks.append(track)
-        top_tracks_by_artist[artist] = tracks
+        if len(tracks) > 0:
+        	top_tracks_by_artist[artist] = tracks
     return top_tracks_by_artist

@@ -15,7 +15,7 @@
     <h1>These are your top songs by artist</h1>
     {% for key in content %}
     <large>{{ key }}<br> </large>
-    {% for item in content[key] %}
+    {% for item in content[key] %}      
       <small>{{ item }} <br> </small>
     {% endfor %}
     {% endfor %}
