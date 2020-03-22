@@ -9,3 +9,4 @@
   - Suggestions (5 suggestions)
   - Implement UI
   - https://stanfordnlp.github.io/stanfordnlp/
+ - need to look at tempo,danceability,energy and instrumentalness for audio analysis
