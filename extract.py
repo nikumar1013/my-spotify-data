@@ -56,9 +56,9 @@ def trending_artist(num_listens):
 # Returns a list of an artist's related artists
 def related_artists(data):
     result = []
-    print(data)
-    # for artist in data['artists']:
-    #     result.append(artist['name'])
+    for artist in data['artists']:
+        result.append(artist['name'])
+        print(artist['name'])
     return result
 
 # Returns a dictionary with the top 50 tracks grouped by artist

@@ -96,13 +96,20 @@ def get_recent_tracks_data(auth_header, limit):
 def get_related_artists(auth_header, artist_id):
     if artist_id is None:
         return None
-    endpoint = "{}/artists{}/related-artists".format(base_url, artist_id)
+    endpoint = "{}/artists/{}/related-artists".format(base_url, artist_id)
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    print(endpoint)
-
     related_artists = extract.related_artists(data)
     return related_artists
+
+
+def get_frequent_artist(auth_header, artist_id):
+    if artist_id is None:
+        return None
+    endpoint = "{}/artists/{}".format(base_url, artist_id)
+    response = requests.get(endpoint, headers=auth_header)
+    artist_name = json.loads(response.text)['name']
+    return artist_name
 
 
 # Initial route for user authentication with Spotify
@@ -117,28 +124,29 @@ def index():
 # Homepage of application
 @app.route("/home")
 def display_top_data():
-    # Checks whether or not we have an access token or not
+    # Obtain an access token either by generating a new one or retrieving from storage
     f = open("token.txt", "r")
-
-    # If there is no token, generate one
     if os.stat("token.txt").st_size == 0:
         access_token = generate_access_token()
-
-    # If there is a token, simply read it
     else:
         access_token = f.readline()
 
-    # Use the token to get the necessary authorization header
+    # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-
-    # Retrieve the top artist data and top tracks data
     top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', 'name')
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
     recent_tracks_data = get_recent_tracks_data(auth_header, '10')
-    related_artists = get_related_artists(auth_header, recent_tracks_data[1])
 
-    # Render HTML with the desired data
-    return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data, recent=recent_tracks_data[0], related=related_artists)
+    # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
+    if recent_tracks_data[1] is None:
+        return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,
+                                recent=recent_tracks_data[0], related=related_artists)
+    else:
+        related_artists = get_related_artists(auth_header, recent_tracks_data[1])
+        frequent_artist = get_frequent_artist(auth_header, recent_tracks_data[1])
+        return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,
+                                recent=recent_tracks_data[0], related=related_artists, 
+                                frequent=frequent_artist)
 
 
 # Page for viewing top tracks grouped by artist
@@ -148,7 +156,7 @@ def display_top_tracks_by_artist():
     f = open("token.txt", "r")
     access_token = f.readline()
     
-    # Use the token to get the necessary authorization header
+    # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
