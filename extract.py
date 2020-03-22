@@ -18,6 +18,15 @@ def top_tracks(data, tag):
     return tracks
 
 
+# Returns a list of track ids from the user's recent listening history
+def recent_track_ids(data):
+    tracks = []
+    for item in data['items']:
+        track_id = item['track']['id']
+        tracks.append(track_id)
+    return tracks
+
+
 # Returns a dictionary with recently listened to tracks grouped by artist
 def recent_tracks(data):
     recents = {}
@@ -37,10 +46,9 @@ def recent_tracks(data):
 
 # Returns the artist id of an artist that the user has been listening to a lot recently
 def trending_artist(num_listens):
+	# Keep track of which artist has the highest number of recent plays
     max_plays = 0
     result = ""
-
-	# Keep track of which artist has the highest number of recent plays
     for artist_id in num_listens:
         num_plays = num_listens.get(artist_id)
         if num_plays > max_plays:
@@ -53,6 +61,7 @@ def trending_artist(num_listens):
     else:
         return None
 
+
 # Returns a list of an artist's related artists
 def related_artists(data):
     result = []
@@ -60,6 +69,7 @@ def related_artists(data):
         result.append(artist['name'])
         print(artist['name'])
     return result
+
 
 # Returns a dictionary with the top 50 tracks grouped by artist
 def top_tracks_by_artist(top_tracks, top_artists):
@@ -73,3 +83,21 @@ def top_tracks_by_artist(top_tracks, top_artists):
         if len(tracks) > 0:
         	top_tracks_by_artist[artist] = tracks
     return top_tracks_by_artist
+
+
+# Process the data needed for audio analysis
+def get_audio_datapoints(data):
+    datapoints = {}
+    datapoints['danceability'] = []
+    datapoints['energy'] = []
+    datapoints['instrumentalness'] = []
+    datapoints['tempo'] = []
+    for category in data['audio_features']:
+        if category is not None:
+            datapoints['danceability'].append(category['danceability'])
+            datapoints['energy'].append(category['energy'])
+            datapoints['instrumentalness'].append(category['instrumentalness'])
+            datapoints['tempo'].append(category['tempo'])
+    print(datapoints)
+    return datapoints
+

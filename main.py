@@ -103,6 +103,7 @@ def get_related_artists(auth_header, artist_id):
     return related_artists
 
 
+# GET the artist that a user has been listening to a lot recently (if there is one)
 def get_frequent_artist(auth_header, artist_id):
     if artist_id is None:
         return None
@@ -110,6 +111,25 @@ def get_frequent_artist(auth_header, artist_id):
     response = requests.get(endpoint, headers=auth_header)
     artist_name = json.loads(response.text)['name']
     return artist_name
+
+
+# GET the track ids from the user's recent listening history
+def get_recent_tracks_ids(auth_header, limit):
+    endpoint = "{}/me/player/recently-played?type=track&limit={}".format(base_url, limit)
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    recent_track_ids = extract.recent_track_ids(data)
+    result = ','.join(recent_track_ids)
+    return result
+
+
+# GET audio features for several tracks and store necessary datapoints
+def do_audio_analysis(auth_header, track_ids):
+    endpoint = "{}/audio-features?ids={}".format(base_url, track_ids)
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    datapoints = extract.get_audio_datapoints(data)
+    return datapoints
 
 
 # Initial route for user authentication with Spotify
@@ -135,7 +155,7 @@ def display_top_data():
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', 'name')
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
-    recent_tracks_data = get_recent_tracks_data(auth_header, '10')
+    recent_tracks_data = get_recent_tracks_data(auth_header, '50')
 
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
@@ -164,6 +184,26 @@ def display_top_tracks_by_artist():
     return render_template("tracks.html", content=top_tracks_by_artist_data)
 
 
+# Page for viewing an audio analysis graphS
+@app.route("/audio-analysis")
+def audio_analysis():
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    track_ids = get_recent_tracks_ids(auth_header, '50')
+    
+    
+    datapoints = do_audio_analysis(auth_header, track_ids)
+
+
+    # Render HTML with the desired data
+    return render_template("audio.html")
+
+
+# Logs the user out of the application
 @app.route("/logout")
 def logout():
     return redirect("https://www.spotify.com/logout/")
