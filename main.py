@@ -1,6 +1,7 @@
 import json
 import requests
 import extract
+import os
 from flask import Flask, request, redirect, g, render_template
 from urllib.parse import quote
 
@@ -30,7 +31,6 @@ auth_query = {
 
 # Returns a token needed to access the Spotify API
 def generate_access_token():
-    global access_token
     # Requests refresh and access tokens (POST)
     auth_token = request.args['code']
     code_payload = {
@@ -48,6 +48,12 @@ def generate_access_token():
     refresh_token = response_data["refresh_token"]
     token_type = response_data["token_type"]
     expires_in = response_data["expires_in"]
+
+    # Store the access token in a file and return the token
+    f = open("token.txt", "w")
+    f.write(access_token)
+    f.close()
+    return access_token
 
 # Gets the name of a track or artist from its respective Spotify id
 def convert_id_to_name(auth_header, datatype, spot_id):
@@ -75,8 +81,8 @@ def get_top_tracks_data(auth_header, time_range, limit, tag):
 
 # GET a user's top tracks grouped by their top artists
 def get_top_tracks_by_artist(auth_header):
-    top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', '0', 'name')
-    top_artists = get_top_artist_data(auth_header, 'long_term', '10', '0', 'name')
+    top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', 'name')
+    top_artists = get_top_artist_data(auth_header, 'long_term', '10', 'name')
     result = extract.get_top_tracks_by_artist(top_tracks, top_artists)
     return result
 
@@ -88,6 +94,7 @@ def get_recent_tracks_data(auth_header, limit):
     recent_tracks_data = extract.get_recent_tracks(data)
     return recent_tracks_data
 
+
 # Initial route for user authentication with Spotify
 @app.route("/")
 def index():
@@ -96,11 +103,22 @@ def index():
     authorization = "{}/?{}".format(auth_url, url_args)
     return redirect(authorization)
 
+
 # Homepage of application
 @app.route("/home")
 def display_top_data():
-    # Generate a token with which to access the Spotify API
-    generate_access_token()
+    # Checks whether or not we have an access token or not
+    f = open("token.txt", "r")
+
+    # If there is no token, generate one
+    if os.stat("token.txt").st_size == 0:
+        access_token = generate_access_token()
+
+    # If there is a token, simply read it
+    else:
+        access_token = f.readline()
+
+    # Use the token to get the necessary authorization header
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
 
     # Retrieve the top artist data and top tracks data
@@ -111,10 +129,15 @@ def display_top_data():
     # Render HTML with the desired data
     return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,recent=recent_tracks_data)
 
+
 # Page for viewing top tracks grouped by artist
 @app.route("/top-tracks-by-artist")
 def display_top_tracks_by_artist():
-    # Obtain an access token and use it to access the Spotify API
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
