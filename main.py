@@ -29,6 +29,7 @@ auth_query = {
     "client_id": client_id
 }
 
+
 # Returns a token needed to access the Spotify API
 def generate_access_token():
     # Requests refresh and access tokens (POST)
@@ -55,43 +56,39 @@ def generate_access_token():
     f.close()
     return access_token
 
-# Gets the name of a track or artist from its respective Spotify id
-def convert_id_to_name(auth_header, datatype, spot_id):
-    endpoint = "{}/{}/{}".format(base_url, datatype, spot_id)
-    response = requests.get(endpoint, headers=auth_header)
-    data = json.loads(response.text)
-    name = data['name']
-    return name
 
 # GET a user's top artists
 def get_top_artist_data(auth_header, time_range, limit, tag):
     endpoint = "{}/me/top/artists?time_range={}&limit={}".format(base_url, time_range, limit) 
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    top_artist_data = extract.get_top_artists(data, tag)
+    top_artist_data = extract.top_artists(data, tag)
     return top_artist_data
+
 
 # GET a user's top tracks
 def get_top_tracks_data(auth_header, time_range, limit, tag):
     endpoint = "{}/me/top/tracks?time_range={}&limit={}".format(base_url, time_range, limit) 
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    top_tracks_data = extract.get_top_tracks(data, tag)
+    top_tracks_data = extract.top_tracks(data, tag)
     return top_tracks_data
+
 
 # GET a user's top tracks grouped by their top artists
 def get_top_tracks_by_artist(auth_header):
     top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', 'name')
     top_artists = get_top_artist_data(auth_header, 'long_term', '10', 'name')
-    result = extract.get_top_tracks_by_artist(top_tracks, top_artists)
+    result = extract.top_tracks_by_artist(top_tracks, top_artists)
     return result
+
 
 # GET a user's recent listening history
 def get_recent_tracks_data(auth_header, limit):
     endpoint = "{}/me/player/recently-played?type=track&limit={}".format(base_url, limit)
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    recent_tracks_data = extract.get_recent_tracks(data)
+    recent_tracks_data = extract.recent_tracks(data)
     return recent_tracks_data
 
 
@@ -143,6 +140,7 @@ def display_top_tracks_by_artist():
 
     # Render HTML with the desired data
     return render_template("tracks.html", content=top_tracks_by_artist_data)
+
 
 # Run the server
 if __name__ == "__main__":
