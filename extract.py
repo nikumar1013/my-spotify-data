@@ -20,25 +20,32 @@ def top_tracks(data, tag):
 
 # Returns a dictionary with recently listened to tracks grouped by artist
 def recent_tracks(data):
-	recents = {}
-	for item in data['items']:
-		track_name = item['track']['name']
-		artist_name = item['track']['artists'][0]['name']
-		recents[track_name] = artist_name
-	return recents
+    recents = {}
+    num_listens = {}
+    for item in data['items']:
+        track_name = item['track']['name']
+        artist_name = item['track']['artists'][0]['name']
+        artist_id = item['track']['artists'][0]['id']
+        recents[track_name] = (artist_name, artist_id)
+        if artist_id in num_listens:
+            num_listens[artist_id] = num_listens[artist_id] + 1
+        else:
+            num_listens[artist_id] = 1
+    trending_id = trending_artist(num_listens)
+    return [recents, trending_id]
 
 
-# Check to see if a user has been listening to a particular artist a lot recently
-def trending_artist(recents):
+# Returns the artist id of an artist that the user has been listening to a lot recently
+def trending_artist(num_listens):
     max_plays = 0
     result = ""
 
 	# Keep track of which artist has the highest number of recent plays
-    for current_artist in recents:
-        num_plays = recents.get(current_artist)
+    for artist_id in num_listens:
+        num_plays = num_listens.get(artist_id)
         if num_plays > max_plays:
             max_plays = num_plays
-            result = current_artist
+            result = artist_id
 	
     # If that maxiumum is greater than 5, the aritst qualifies as a frequent listen
     if max_plays >= 5:
@@ -46,6 +53,13 @@ def trending_artist(recents):
     else:
         return None
 
+# Returns a list of an artist's related artists
+def related_artists(data):
+    result = []
+    print(data)
+    # for artist in data['artists']:
+    #     result.append(artist['name'])
+    return result
 
 # Returns a dictionary with the top 50 tracks grouped by artist
 def top_tracks_by_artist(top_tracks, top_artists):

@@ -92,6 +92,19 @@ def get_recent_tracks_data(auth_header, limit):
     return recent_tracks_data
 
 
+# GET an artist's related artists
+def get_related_artists(auth_header, artist_id):
+    if artist_id is None:
+        return None
+    endpoint = "{}/artists{}/related-artists".format(base_url, artist_id)
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    print(endpoint)
+
+    related_artists = extract.related_artists(data)
+    return related_artists
+
+
 # Initial route for user authentication with Spotify
 @app.route("/")
 def index():
@@ -122,9 +135,10 @@ def display_top_data():
     top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', 'name')
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
     recent_tracks_data = get_recent_tracks_data(auth_header, '10')
+    related_artists = get_related_artists(auth_header, recent_tracks_data[1])
 
     # Render HTML with the desired data
-    return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,recent=recent_tracks_data)
+    return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data, recent=recent_tracks_data[0], related=related_artists)
 
 
 # Page for viewing top tracks grouped by artist
@@ -140,6 +154,11 @@ def display_top_tracks_by_artist():
 
     # Render HTML with the desired data
     return render_template("tracks.html", content=top_tracks_by_artist_data)
+
+
+@app.route("/logout")
+def logout():
+    return redirect("https://www.spotify.com/logout/")
 
 
 # Run the server
