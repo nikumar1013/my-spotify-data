@@ -10,3 +10,10 @@
   - Implement UI
   - https://stanfordnlp.github.io/stanfordnlp/
  - need to look at tempo,danceability,energy and instrumentalness for audio analysis
+## Personality Types Classified  - https://en.wikipedia.org/wiki/Big_Five_personality_traits Big 5
+ - SIMPING
+ - Openness to experience (inventive/curious vs. consistent/cautious)
+ - Conscientiousness (efficient/organized vs. easy-going/careless)
+ - Extraversion (outgoing/energetic vs. solitary/reserved)
+ - Agreeableness (friendly/compassionate vs. challenging/detached)
+ - Neuroticism (sensitive/nervous vs. secure/confident)
