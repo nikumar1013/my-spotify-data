@@ -63,10 +63,12 @@
 	</header>
 	<br>
 	<header>
-		<h4>You've been listening to {{frequent}} a lot recently! Here are some similar artists you might like:</h4>
-		{% for item in related %}
-		<small> {{ item }}<br> </small>
-		{% endfor %}
+		{% if related != 0 %}
+			<h4>You've been listening to {{frequent}} a lot recently! Here are some similar artists you might like:</h4>
+			{% for item in related %}
+			<small> {{ item }}<br> </small>
+			{% endfor %}
+		{% endif %}
 	</header>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

@@ -140,7 +140,7 @@ def display_top_data():
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
         return render_template("index.html", artists=top_artist_data, tracks=top_tracks_data,
-                                recent=recent_tracks_data[0], related=related_artists)
+                                recent=recent_tracks_data[0],related=0)
     else:
         related_artists = get_related_artists(auth_header, recent_tracks_data[1])
         frequent_artist = get_frequent_artist(auth_header, recent_tracks_data[1])
