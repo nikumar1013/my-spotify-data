@@ -2,17 +2,13 @@ import json
 import requests
 import extract
 import os
-from flask import Flask, request, redirect, g, render_template, Response
-from urllib.parse import quote
-
-
-
-
-#Imports for plotting
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from flask import Flask, request, redirect, g, render_template, Response
+from urllib.parse import quote
+
 
 app = Flask(__name__)
 
@@ -28,10 +24,12 @@ base_url = "https://api.spotify.com/v1"
 # Redirect uri and authorization scopes
 redirect_uri = "http://127.0.0.1:8080/home"
 scope = "user-top-read user-read-recently-played"
-CUR_DIR = os.getcwd()
 
+# Image folder configuration
+CUR_DIR = os.getcwd()
 IMG_DIR = os.path.join(CUR_DIR, "/templates/images/energy.jpg")
 app.config['UPLOAD_FOLDER'] = "/static/"
+
 # Query parameters for authorization
 auth_query = {
     "response_type": "code",
@@ -143,6 +141,8 @@ def do_audio_analysis(auth_header, track_ids):
     datapoints = extract.get_audio_datapoints(data)
     return datapoints
 
+
+# Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
     df['Song Number'] = range(1, len(datapoints[tag]) + 1)
@@ -150,9 +150,8 @@ def make_graph(datapoints, tag):
     df[y_title] = datapoints[tag]
     sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
     fig = sns_plot.get_figure()
-    #should change this to relative size of the screen
+    # Should change this to relative size of the screen
     fig.set_size_inches(9.25, 5.25)
-    print("saving")
     fig.savefig('static/{t}.png'.format(t=tag))
 
 
@@ -220,14 +219,13 @@ def audio_analysis():
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     track_ids = get_recent_tracks_ids(auth_header, '50')
     
-    
+    # Create a graph using datapoints
     datapoints = do_audio_analysis(auth_header, track_ids)
     matplotlib.use('Agg')
     matplotlib.style.use('ggplot')
     sns.set_style('dark')
     for key in datapoints:
         make_graph(datapoints, key)
-
 
     # Render HTML with the desired data
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
