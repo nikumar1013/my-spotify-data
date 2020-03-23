@@ -7,13 +7,37 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <nav class="navbar navbar-expand-lg navbar-green bg-light">
+      <a class="navbar-brand" href="/">Spotify Data App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/top-tracks-by-artist">Your Top Tracks by Artist</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/audio-analysis">Audio Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Your Personality Analysis</a>
+        </li>
+        <li class="nav-item">
+        <a class = "nav-link" href="/logout">Logout</a>
+        </li>
+        </ul>
+      </div>
+    </nav>
     <title>Top Tracks Sorted By Artist</title>
   </head>
   <body>
     <h4>Audio Analysis Data:</h4>
     <h1>Danceability Graph</h1>
-    <img src="templates/dance.jpg", width="400", height="300"></body></img>
+    <img src="{{ user_image }}" alt="User Image" width="400" height="300">
     
 
     <!-- Optional JavaScript -->

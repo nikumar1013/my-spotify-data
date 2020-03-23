@@ -28,7 +28,9 @@ base_url = "https://api.spotify.com/v1"
 # Redirect uri and authorization scopes
 redirect_uri = "http://127.0.0.1:8080/home"
 scope = "user-top-read user-read-recently-played"
-
+CUR_DIR = os.getcwd()
+OIMG_DIR = os.path.join(CUR_DIR, "/templates/images")
+IMG_DIR = os.path.join(CUR_DIR, "/templates/images/energy.jpg")
 # Query parameters for authorization
 auth_query = {
     "response_type": "code",
@@ -142,13 +144,15 @@ def do_audio_analysis(auth_header, track_ids):
 
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
-    df['Song Number'] = range(1,51)
+    df['Song Number'] = range(1, len(datapoints[tag]) + 1)
     y_title = tag.capitalize()
     df[y_title] = datapoints[tag]
     sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
     fig = sns_plot.get_figure()
-    fig.set_size_inches(18.5, 10.5)
-    fig.savefig('templates/{t}.jpg'.format(t=tag))
+    #should change this to relative size of the screen
+    fig.set_size_inches(9.25, 5.25)
+    print("saving")
+    fig.savefig('templates/images/{t}.jpg'.format(t=tag))
 
 
 # Initial route for user authentication with Spotify
@@ -205,7 +209,7 @@ def display_top_tracks_by_artist():
 
 
 # Page for viewing an audio analysis graphS
-@app.route("/audio-analysis")
+@app.route("/audio-analysis", methods=['GET'])
 def audio_analysis():
     # Obtain the access token from where it is stored
     f = open("token.txt", "r")
@@ -220,12 +224,23 @@ def audio_analysis():
     matplotlib.use('Agg')
     matplotlib.style.use('ggplot')
     sns.set_style('dark')
+#     objects = ('Python', 'C++', 'Java', 'Perl', 'Scala', 'Lisp')
+# y_pos = np.arange(len(objects))
+# performance = [10,8,6,4,2,1]
+
+# plt.bar(y_pos, performance, align='center', alpha=0.5)
+# plt.xticks(y_pos, objects)
+# plt.ylabel('Usage')
+# plt.title('Programming language usage')
+
+# plt.show()
+    # i = 0
     for key in datapoints:
         make_graph(datapoints, key)
 
 
     # Render HTML with the desired data
-    return render_template("audio.html")
+    return render_template("audio.html", user_image = IMG_DIR)
 
 
 # Logs the user out of the application
