@@ -151,7 +151,7 @@ def make_graph(datapoints, tag):
     sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
     fig = sns_plot.get_figure()
     # Should change this to relative size of the screen
-    fig.set_size_inches(9.25, 5.25)
+    fig.set_size_inches(15, 7.5)
     fig.savefig('static/{t}.png'.format(t=tag))
 
 
@@ -228,8 +228,11 @@ def audio_analysis():
         make_graph(datapoints, key)
 
     # Render HTML with the desired data
-    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
-    return render_template("audio.html", user_image = full_filename)
+    img_1_file = os.path.join(app.config['UPLOAD_FOLDER'], 'danceability.png')
+    img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
+    img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
+    img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
+    return render_template("audio.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
 
 
 # Logs the user out of the application
