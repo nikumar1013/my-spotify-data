@@ -98,6 +98,6 @@ def get_audio_datapoints(data):
             datapoints['energy'].append(category['energy'])
             datapoints['instrumentalness'].append(category['instrumentalness'])
             datapoints['tempo'].append(category['tempo'])
-    print(datapoints)
+   # print(datapoints)
     return datapoints
 

@@ -2,8 +2,17 @@ import json
 import requests
 import extract
 import os
-from flask import Flask, request, redirect, g, render_template
+from flask import Flask, request, redirect, g, render_template, Response
 from urllib.parse import quote
+
+
+
+
+#Imports for plotting
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -131,6 +140,16 @@ def do_audio_analysis(auth_header, track_ids):
     datapoints = extract.get_audio_datapoints(data)
     return datapoints
 
+def make_graph(datapoints, tag):
+    df = pd.DataFrame()
+    df['Song Number'] = range(1,51)
+    y_title = tag.capitalize()
+    df[y_title] = datapoints[tag]
+    sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
+    fig = sns_plot.get_figure()
+    fig.set_size_inches(18.5, 10.5)
+    fig.savefig('templates/{t}.jpg'.format(t=tag))
+
 
 # Initial route for user authentication with Spotify
 @app.route("/")
@@ -178,6 +197,7 @@ def display_top_tracks_by_artist():
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    sns.set_style("dark")
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
     # Render HTML with the desired data
@@ -197,6 +217,11 @@ def audio_analysis():
     
     
     datapoints = do_audio_analysis(auth_header, track_ids)
+    matplotlib.use('Agg')
+    matplotlib.style.use('ggplot')
+    sns.set_style('dark')
+    for key in datapoints:
+        make_graph(datapoints, key)
 
 
     # Render HTML with the desired data
