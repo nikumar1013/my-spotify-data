@@ -7,11 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <title>Top Tracks Sorted By Artist</title>
-  </head>
-  <body>
-    <header><nav class="navbar navbar-expand-lg navbar-green bg-light">
+    <nav class="navbar navbar-expand-lg navbar-green bg-light">
       <a class="navbar-brand" href="/">Spotify Data App</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,23 +24,17 @@
             <a class="nav-link" href="/audio-analysis">Audio Analysis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="predict-personality">Your Personality Analysis</a>
+            <a class="nav-link" href="#">Your Personality Analysis</a>
         </li>
         <li class="nav-item">
-        <a id = "gay" class = "nav-link" href="/logout">Logout</a>
+        <a class = "nav-link" href="/logout">Logout</a>
         </li>
         </ul>
       </div>
     </nav>
-    <h1>Top songs by artist</h1>
-    {% for key in content %}
-    <large>{{ key }}<br> </large>
-    {% for item in content[key] %}      
-      <small>{{ item }} <br> </small>
-    {% endfor %}
-    {% endfor %}
-    </header>
-
+    <title>Top Tracks Sorted By Artist</title>
+  </head>
+  <body>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

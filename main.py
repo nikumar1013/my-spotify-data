@@ -85,6 +85,7 @@ def get_top_tracks_data(auth_header, time_range, limit, tag):
     return top_tracks_data
 
 
+
 # GET a user's top tracks grouped by their top artists
 def get_top_tracks_by_artist(auth_header):
     top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', 'name')
@@ -140,6 +141,12 @@ def do_audio_analysis(auth_header, track_ids):
     data = json.loads(response.text)
     datapoints = extract.get_audio_datapoints(data)
     return datapoints
+
+# def get_tracks_from_playlist(auth_header,list_id):
+#     endpoint = "{}/playlists?playlist_id={}/tracks".format(base_url, list_id)
+#     response = requests.get(endpoint, headers=auth_header)
+#     data = json.loads(response.text)
+#     print(data)
 
 
 # Graph data using matplotlib and seaborne
@@ -233,6 +240,13 @@ def audio_analysis():
     img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
     return render_template("audio.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
+
+
+
+@app.route("/predict-personality", methods=['GET'])
+def predict_personality():
+    return render_template("person.html")
+
 
 
 # Logs the user out of the application
