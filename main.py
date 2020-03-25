@@ -142,6 +142,7 @@ def do_audio_analysis(auth_header, track_ids):
     datapoints = extract.get_audio_datapoints(data)
     return datapoints
 
+
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
@@ -155,13 +156,11 @@ def make_graph(datapoints, tag):
     fig.savefig('static/{t}.png'.format(t=tag))
 
 
-
-def get_tracks_from_playlist(auth_header,list_id,person_type):
-    endpoint = "{}/playlists?playlist_id={}".format(base_url, list_id)
+# GET the tracks from a particular playlist
+def get_tracks_from_playlist(auth_header, list_id, person_type):
+    endpoint = "{}/playlists/playlist_id={}".format(base_url, list_id)
     response = requests.get(endpoint, headers=auth_header)
-    print(response)
     data = json.loads(response.text)
-    print("I made it here")
     print(data)
 
 
@@ -246,10 +245,11 @@ def audio_analysis():
 
 
 
-@app.route("/predict-personality", methods=['GET'])
+@app.route("/predict-personality")
 def predict_personality():
     f = open("token.txt", "r")
     access_token = f.readline()
+
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     get_tracks_from_playlist(auth_header, "0B0XVWCgz51yb8G0DPu7RO", '0')
     return render_template("person.html")
