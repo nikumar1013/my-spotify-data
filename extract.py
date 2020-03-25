@@ -67,7 +67,6 @@ def related_artists(data):
     result = []
     for artist in data['artists']:
         result.append(artist['name'])
-        print(artist['name'])
     return result
 
 
@@ -100,4 +99,3 @@ def get_audio_datapoints(data):
             datapoints['tempo'].append(category['tempo'])
    # print(datapoints)
     return datapoints
-
