@@ -142,13 +142,6 @@ def do_audio_analysis(auth_header, track_ids):
     datapoints = extract.get_audio_datapoints(data)
     return datapoints
 
-# def get_tracks_from_playlist(auth_header,list_id):
-#     endpoint = "{}/playlists?playlist_id={}/tracks".format(base_url, list_id)
-#     response = requests.get(endpoint, headers=auth_header)
-#     data = json.loads(response.text)
-#     print(data)
-
-
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
@@ -160,6 +153,16 @@ def make_graph(datapoints, tag):
     # Should change this to relative size of the screen
     fig.set_size_inches(15, 7.5)
     fig.savefig('static/{t}.png'.format(t=tag))
+
+
+
+def get_tracks_from_playlist(auth_header,list_id,person_type):
+    endpoint = "{}/playlists?playlist_id={}".format(base_url, list_id)
+    response = requests.get(endpoint, headers=auth_header)
+    print(response)
+    data = json.loads(response.text)
+    print("I made it here")
+    print(data)
 
 
 # Initial route for user authentication with Spotify
@@ -245,6 +248,10 @@ def audio_analysis():
 
 @app.route("/predict-personality", methods=['GET'])
 def predict_personality():
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    get_tracks_from_playlist(auth_header, "0B0XVWCgz51yb8G0DPu7RO", '0')
     return render_template("person.html")
 
 
