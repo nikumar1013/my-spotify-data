@@ -23,7 +23,7 @@ base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
 redirect_uri = "http://127.0.0.1:8080/home"
-scope = "user-top-read user-read-recently-played"
+scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # Image folder configuration
 CUR_DIR = os.getcwd()
@@ -158,10 +158,10 @@ def make_graph(datapoints, tag):
 
 # GET the tracks from a particular playlist
 def get_tracks_from_playlist(auth_header, list_id, person_type):
-    endpoint = "{}/playlists/playlist_id={}".format(base_url, list_id)
+    endpoint = "{}/playlists/{}/tracks".format(base_url, list_id)
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    print(data)
+    datapoints = get_dataframe(auth_header, data, person_type)
 
 
 # Initial route for user authentication with Spotify
@@ -243,13 +243,27 @@ def audio_analysis():
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
     return render_template("audio.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
 
+def get_dataframe(auth_header, data, label):
+    df = pd.DataFrame()
+    items = data['items'] 
+    string_ids = ""
+    for track in items:
+        track_id = track['track']['id']
+        string_ids += track_id
+        string_ids += ','
+    string_ids = string_ids[:-1]
+    datapoints = do_audio_analysis(auth_header, string_ids)
+    df['Danceability'] = datapoints['danceability']
+    df['Tempo'] = datapoints['tempo']
+    df['Instrumentalness'] = datapoints['instrumentalness']
+    df['Energy'] = datapoints['energy']
+    return df
 
 
 @app.route("/predict-personality")
 def predict_personality():
     f = open("token.txt", "r")
     access_token = f.readline()
-
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     get_tracks_from_playlist(auth_header, "0B0XVWCgz51yb8G0DPu7RO", '0')
     return render_template("person.html")
