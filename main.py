@@ -85,7 +85,6 @@ def get_top_tracks_data(auth_header, time_range, limit, tag):
     return top_tracks_data
 
 
-
 # GET a user's top tracks grouped by their top artists
 def get_top_tracks_by_artist(auth_header):
     top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', 'name')
@@ -151,12 +150,29 @@ def make_graph(datapoints, tag):
     df[y_title] = datapoints[tag]
     sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
     fig = sns_plot.get_figure()
-    # Should change this to relative size of the screen
-    fig.set_size_inches(15, 7.5)
+    fig.set_size_inches(15, 7.5)     # Should change this to relative size of the screen
     fig.savefig('static/{t}.png'.format(t=tag))
 
 
-# GET the tracks from a particular playlist
+# Returns a pandas dataframe containing data from the audio analysis
+def get_dataframe(auth_header, data, label):
+    df = pd.DataFrame()
+    items = data['items'] 
+    string_ids = ""
+    for track in items:
+        track_id = track['track']['id']
+        string_ids += track_id
+        string_ids += ','
+    string_ids = string_ids[:-1]
+    datapoints = do_audio_analysis(auth_header, string_ids)
+    df['Danceability'] = datapoints['danceability']
+    df['Tempo'] = datapoints['tempo']
+    df['Instrumentalness'] = datapoints['instrumentalness']
+    df['Energy'] = datapoints['energy']
+    return df
+
+
+# GET the tracks from a playlist
 def get_tracks_from_playlist(auth_header, list_id, person_type):
     endpoint = "{}/playlists/{}/tracks".format(base_url, list_id)
     response = requests.get(endpoint, headers=auth_header)
@@ -243,23 +259,8 @@ def audio_analysis():
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
     return render_template("audio.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
 
-def get_dataframe(auth_header, data, label):
-    df = pd.DataFrame()
-    items = data['items'] 
-    string_ids = ""
-    for track in items:
-        track_id = track['track']['id']
-        string_ids += track_id
-        string_ids += ','
-    string_ids = string_ids[:-1]
-    datapoints = do_audio_analysis(auth_header, string_ids)
-    df['Danceability'] = datapoints['danceability']
-    df['Tempo'] = datapoints['tempo']
-    df['Instrumentalness'] = datapoints['instrumentalness']
-    df['Energy'] = datapoints['energy']
-    return df
 
-
+# Page for viewing a user's sentiment analysis
 @app.route("/predict-personality")
 def predict_personality():
     f = open("token.txt", "r")
@@ -267,7 +268,6 @@ def predict_personality():
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     get_tracks_from_playlist(auth_header, "0B0XVWCgz51yb8G0DPu7RO", '0')
     return render_template("person.html")
-
 
 
 # Logs the user out of the application
