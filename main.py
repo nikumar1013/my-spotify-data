@@ -11,7 +11,7 @@ from urllib.parse import quote
 
 
 app = Flask(__name__)
-
+    
 # API Keys
 client_id = "26b7856504274aaf8e73196314a11837"
 client_secret = "090108ca091346288c6c27e0d0eec073"
