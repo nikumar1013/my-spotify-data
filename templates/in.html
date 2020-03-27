@@ -1,6 +1,5 @@
 <html>
 <head>
-
     <meta content="A place to view your Spotify stats." property="og:description">
     <!-- Favicon -->
     <link rel="icon" href="../static/images/favicon.ico">
@@ -15,8 +14,9 @@
 </head>
 <body>
 
+<!-- Navbar Code -->
 <nav class="navbar navbar-expand-lg navbar-dark black">
-    <a class="navbar-brand" href="/">My Spotify Data</a>
+    <a class="navbar-brand" href="/"><font color="green">My Spotify Data</font></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarOptions" aria-controls="navbarOptions" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -48,3 +48,74 @@
         </span>
     </div>
 </nav>
+
+<!-- Footer Code -->
+<footer class="footer page-footer font-small black mt-5">
+    <div class="footer-copyright text-center py-3">Made by Nikhil Kumar, Abhijit Raman, and Nicholas Wille</div>
+</footer>
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>
+
+
+<div class="text-center">
+    <h1 class="display-4 mt-5 bold">Welcome! </h1>
+    <h3 class="mt-1">Here is your recent listening history</h3>
+</div>
+
+<div class="mt-5 pl-5 pr-5 container wide">
+    <h4 class="mb-4">Weekly Tracks</h4>
+    <div class="row">
+        {% for item in recent %}
+        <div class="col-2">
+            <div class="card mb-3">
+                <div class="view overlay zoom">
+                    <div class="mask rgba-white-slight"></div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title song-title"></h4>
+                    <p class="card-text song-sub"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-4 mt-4">Weekly Artists</h4>
+    <div class="row">
+            <div class="col-2">
+                <div class="card mb-3">
+                    <div class="view overlay zoom">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="text-center">
+    <h1 class="display-4 mt-5 bold">Music Speaks</h1>
+    <h3 class="mt-1">What have you been listening to?</h3>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title"><a>Let's Jump In!</a></h4>
+                    <p class="card-text">Signing in will allow you to view statistics about the music and artists you listen to on Spotify. Your token is stored locally and is not saved on any server, feel free to take a look at the code in the <a href="https://github.com/MastaCoder/mySpotify">GitHub Repo.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
