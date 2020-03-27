@@ -169,6 +169,7 @@ def get_dataframe(auth_header, data, label):
     df['Tempo'] = datapoints['tempo']
     df['Instrumentalness'] = datapoints['instrumentalness']
     df['Energy'] = datapoints['energy']
+    df['Label'] = [label] * (len(df.index))
     return df
 
 
@@ -178,6 +179,7 @@ def get_tracks_from_playlist(auth_header, list_id, person_type):
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
     datapoints = get_dataframe(auth_header, data, person_type)
+    return datapoints
 
 
 # Initial route for user authentication with Spotify
@@ -266,7 +268,20 @@ def predict_personality():
     f = open("token.txt", "r")
     access_token = f.readline()
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    get_tracks_from_playlist(auth_header, "0B0XVWCgz51yb8G0DPu7RO", '0')
+    frame_list = []
+    """
+    Openness to experience (inventive/curious vs. consistent/cautious) = 1
+    Conscientiousness (efficient/organized vs. easy-going/careless) = 2
+    Extraversion (outgoing/energetic vs. solitary/reserved) = 3
+    Agreeableness (friendly/compassionate vs. challenging/detached) = 4
+    Neuroticism (sensitive/nervous vs. secure/confident) = 5
+    """
+    frame_list.append(get_tracks_from_playlist(auth_header,"0VHCKkJwUDBRry4JWOcDwF",5))#sensitive
+    frame_list.append(get_tracks_from_playlist(auth_header,"0gY3yNHzIQ2zyIi8l4faO6",4))#compassion
+    frame_list.append(get_tracks_from_playlist(auth_header,"0B0XVWCgz51yb8G0DPu7RO",3))#outgoing
+    result = pd.concat(frame_list)
+    result.to_csv(r'D:\Programming\spotify-data-app\tracks.csv', index = True)
+
     return render_template("person.html")
 
 
