@@ -132,9 +132,9 @@ def get_recent_tracks_ids(auth_header, limit):
     result = ','.join(recent_track_ids)
     return result
 
-
-def get_track_images(auth_header, tracks_ids):
-    endpoint = "{}/tracks"
+# GET the artwork of tracks
+def get_track_images(auth_header, track_ids):
+    endpoint = "{}/tracks?ids={}".format(base_url)
 
 
 # GET audio features for several tracks and store necessary datapoints
@@ -209,7 +209,9 @@ def display_top_data():
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', 'name')
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
-    recent_tracks_data = get_recent_tracks_data(auth_header, '50')
+    recent_tracks_data = get_recent_tracks_data(auth_header, '30')
+    recent_track_ids = get_recent_tracks_ids(auth_header, '30')
+    
 
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
