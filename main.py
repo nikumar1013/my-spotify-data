@@ -133,6 +133,10 @@ def get_recent_tracks_ids(auth_header, limit):
     return result
 
 
+def get_track_images(auth_header, tracks_ids):
+    endpoint = "{}/tracks"
+
+
 # GET audio features for several tracks and store necessary datapoints
 def do_audio_analysis(auth_header, track_ids):
     endpoint = "{}/audio-features?ids={}".format(base_url, track_ids)

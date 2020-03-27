@@ -66,24 +66,27 @@
 
 <div class="text-center">
     <h1 class="display-4 mt-5 bold">Welcome! </h1>
-    <h3 class="mt-1">Here is your recent listening history</h3>
+    <h3 class="mt-1">View your listening history below and use the tabs above to navigate</h3>
 </div>
 
 <div class="mt-5 pl-5 pr-5 container wide">
-    <h4 class="mb-4">Weekly Tracks</h4>
+    <h4 class="mb-4">Your 30 recently played tracks:</h4>
     <div class="row">
-        {% for item in recent %}
-        <div class="col-2">
-            <div class="card mb-3">
-                <div class="view overlay zoom">
-                    <div class="mask rgba-white-slight"></div>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title song-title"></h4>
-                    <p class="card-text song-sub"></p>
+        <header>
+            {% for item in recent %}
+            <div class="col-2">
+                <div class="card mb-3">
+                    <div class="view overlay zoom">
+                        <img class="card-img-top cover" src="https://www.scdn.co/i/_global/open-graph-default.png">
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title song-title">{{item}}</h4>
+                        <p class="card-text song-sub">{{recent[item][0]}}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+            {% endfor %}
+        </header>
     </div>
 
     <h4 class="mb-4 mt-4">Weekly Artists</h4>
