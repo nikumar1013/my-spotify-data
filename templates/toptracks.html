@@ -57,7 +57,7 @@
     <div class="footer-copyright text-center py-3">Designed and developed by Nikhil Kumar, Abhijit Raman, and Nicholas Wille</div>
 </footer>
 
-
+<!-- Display Data -->
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
         <h1 class="h1-size">Top Tracks</h1>
@@ -65,13 +65,13 @@
     </div>
     <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link active" data-toggle="tab" href="/top-tracks-short-term" role="tab" aria-selected="false">Past 1 Month</a>
+            <a class="nav-link {{short_link_status}}" data-toggle="tab" href="/top-tracks-short-term" role="tab" aria-selected="false">Past 1 Month</a>
         </li>
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link active" data-toggle="tab" href="/top-tracks-medium-term" role="tab" aria-selected="false">Past 6 Months</a>
+            <a class="nav-link {{med_link_status}}" data-toggle="tab" href="/top-tracks-medium-term" role="tab" aria-selected="false">Past 6 Months</a>
         </li>
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link active" data-toggle="tab" href="/top-tracks-long-term" role="tab" aria-selected="false">All Time</a>
+            <a class="nav-link {{long_link_status}}" data-toggle="tab" href="/top-tracks-long-term" role="tab" aria-selected="false">All Time</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -96,3 +96,11 @@
     </div>
 </div>
 
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script> -->
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>

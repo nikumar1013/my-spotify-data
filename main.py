@@ -277,7 +277,7 @@ def display_top_tracks(term_length):
     return (top_tracks_data, images)
 
 
-#
+# Function that can be called by a route based on term length
 def display_top_artists(term_length):
     # Obtain the access token from where it is stored
     f = open("token.txt", "r")
@@ -294,21 +294,23 @@ def display_top_artists(term_length):
 @app.route("/top-tracks-short-term")
 def display_top_tracks_short_term():
     data = display_top_tracks('short_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="active", med_link_status="", long_link_status="") 
 
 
 # Page for viewing top tracks in the past 6 months
 @app.route("/top-tracks-medium-term")
 def display_top_tracks_medium_term():
     data = display_top_tracks('medium_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
+    toggle = "False"
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", med_link_status="active", long_link_status="") 
 
 
 # Page for viewing all time top tracks
 @app.route("/top-tracks-long-term")
 def display_top_tracks_long_term():
     data = display_top_tracks('long_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
+    toggle = "False"
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", med_link_status="", long_link_status="active") 
 
 
 # 

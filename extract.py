@@ -42,10 +42,10 @@ def track_images(data):
             images.append(image)
         return images
     except:
-        if(data['error']):
+        if data['error']:
             error = data['error']
             status = error['status']
-            if(status == 400):
+            if status == 400:
                 return images
 
 # Returns a list of urls for artist profile images
@@ -57,10 +57,10 @@ def artist_images(data):
             images.append(image)
         return images
     except:
-        if(data['error']):
+        if data['error']:
             error = data['error']
             status = error['status']
-            if(status == 400):
+            if status == 400:
                 return images
 
 
