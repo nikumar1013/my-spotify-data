@@ -1,72 +1,121 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Spotify Data App</title>
-  </head>
-  <body>
-    <!-- NAVBAR CODE BELOW -->
-    <nav class="navbar navbar-expand-lg navbar-blue bg-light">
-      <a class="navbar-brand" href="/">Spotify Data App</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<html>
+<head>
+    <title>My Spotify Data</title>
+    <meta content="A place to view your Spotify stats." property="og:description">
+    <!-- Favicon -->
+    <link rel="icon" href="../static/images/favicon.ico">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/css/mdb.min.css" rel="stylesheet">
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+
+<!-- Navbar Code -->
+<nav class="navbar navbar-expand-lg navbar-dark black">
+    <a class="navbar-brand" href="/"><font color="green">My Spotify Data</font></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarOptions" aria-controls="navbarOptions" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/top-tracks-short-term">Your Top Tracks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/top-artists-short-term">Your Top Artists</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="/top-tracks-by-artist">Your Top Tracks by Artist</a>
-          </li>
-          <li class="nav-item">
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="/audio-analysis">Audio Analysis</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/predict-personality">Your Personality Analysis</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="/logout">Logout</a>
-          </li>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/predict-personality">Personality Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class = "nav-link" href="/logout">Sign Out</a>
+        </li>
         </ul>
-      </div>
-    </nav>
-    <!-- Printing data to screen (testing) -->
-    <header>
-      <h4>Top 10 artists:</h4>
-      {% for item in artists %}
-      <small> {{ item }} <br> </small>
-      {% endfor %}
-    </header>
-    <br>
-    <header>
-      <h4>Top 10 songs:</h4>
-      {% for item in tracks %}
-      <small> {{ item }} by {{tracks[item]}}<br> </small>
-      {% endfor %}
-    </header>
-    <br>
-    <header>
-      <h4>Recently played tracks (duplicates not shown):</h4>
-      {% for item in recent %}
-      <small> {{ item }} by {{recent[item][0]}}<br> </small>
-      {% endfor %}
-    </header>
-    <br>
-    <header>
-      {% if related != 0 %}
-      <h4>You've been listening to {{frequent}} a lot recently! Here are some similar artists you might like:</h4>
-      {% for item in related %}
-      <small> {{ item }}<br> </small>
-      {% endfor %}
-      {% endif %}
-    </header>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
-</html>
+        <span class="navbar-text white-text">
+        </span>
+    </div>
+</nav>
+
+<!-- Footer Code -->
+<footer class="footer page-footer font-small black mt-5">
+    <div class="footer-copyright text-center py-3">Designed and developed by Nikhil Kumar, Abhijit Raman, and Nicholas Wille</div>
+</footer>
+
+<!-- Display data -->
+<div class="text-center">
+    <h1 class="display-4 mt-5 bold">Welcome! </h1>
+    <h3 class="mt-1">View your listening history below and use the tabs above to navigate</h3>
+</div>
+<div class="mt-5 pl-5 pr-5 container wide">
+    <h4 class="mb-4">Here are up to 50 of your recently played tracks (duplicates not shown):</h4>
+    <div class="row">
+        {% for item in recent %}
+        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                <div class="card mb-3">
+                <div class="view overlay zoom">
+                    <img class="card-img-top cover" src={{images[loop.index0]}}>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title song-title">{{item}}</h4>
+                    <p class="card-text song-sub">{{recent[item][0]}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>
+
+
+    <!-- <h4 class="mb-4 mt-4">Weekly Artists</h4>
+    <div class="row">
+            <div class="col-2">
+                <div class="card mb-3">
+                    <div class="view overlay zoom">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+    </div> -->
+
+
+<!-- <div class="text-center">
+    <h1 class="display-4 mt-5 bold">Music Speaks</h1>
+    <h3 class="mt-1">What have you been listening to?</h3>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title"><a>Let's Jump In!</a></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

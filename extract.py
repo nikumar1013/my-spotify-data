@@ -1,20 +1,24 @@
 # Returns a list of the user's top 10 artists
-def top_artists(data, tag):
+def top_artists(data):
     artists = []
     items = data['items']
     for item in items:
-        artist_name = item[tag]
-        artists.append(artist_name)
+        artist_name = item['name']
+        artist_id = item['id']
+        artist_tuple = (artist_name, artist_id)
+        artists.append(artist_tuple)
     return artists
 
 
 # Returns a list of the user's top 10 tracks
-def top_tracks(data, tag):
+def top_tracks(data):
     tracks = {}
     for item in data['items']:
-        track_name = item[tag]
-        artist_name = item['artists'][0][tag]
-        tracks[track_name] = artist_name
+        track_name = item['name']
+        track_id = item['id']
+        track_tuple = (track_name, track_id)
+        artist_name = item['artists'][0]['name']
+        tracks[track_tuple] = artist_name
     return tracks
 
 
@@ -33,6 +37,15 @@ def track_images(data):
     images = []
     for item in data['tracks']:
         image = item['album']['images'][0]['url']
+        images.append(image)
+    return images
+
+
+# Returns a list of urls for artist profile images
+def artist_images(data):
+    images = []
+    for item in data['artists']:
+        image = item['images'][0]['url']
         images.append(image)
     return images
 

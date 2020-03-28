@@ -68,27 +68,27 @@ def generate_access_token():
 
 
 # GET a user's top artists
-def get_top_artist_data(auth_header, time_range, limit, tag):
+def get_top_artist_data(auth_header, time_range, limit):
     endpoint = "{}/me/top/artists?time_range={}&limit={}".format(base_url, time_range, limit) 
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    top_artist_data = extract.top_artists(data, tag)
+    top_artist_data = extract.top_artists(data)
     return top_artist_data
 
 
 # GET a user's top tracks
-def get_top_tracks_data(auth_header, time_range, limit, tag):
+def get_top_tracks_data(auth_header, time_range, limit):
     endpoint = "{}/me/top/tracks?time_range={}&limit={}".format(base_url, time_range, limit) 
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
-    top_tracks_data = extract.top_tracks(data, tag)
+    top_tracks_data = extract.top_tracks(data)
     return top_tracks_data
 
 
 # GET a user's top tracks grouped by their top artists
 def get_top_tracks_by_artist(auth_header):
-    top_tracks = get_top_tracks_data(auth_header, 'long_term', '50', 'name')
-    top_artists = get_top_artist_data(auth_header, 'long_term', '10', 'name')
+    top_tracks = get_top_tracks_data(auth_header, 'long_term', '50')
+    top_artists = get_top_artist_data(auth_header, 'long_term', '10')
     result = extract.top_tracks_by_artist(top_tracks, top_artists)
     return result
 
@@ -129,7 +129,6 @@ def get_recent_tracks_ids(auth_header, limit):
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
     recent_track_ids = extract.recent_track_ids(data)
-    print(len(recent_track_ids))
     result = ','.join(recent_track_ids)
     return result
 
@@ -141,6 +140,15 @@ def get_track_images(auth_header, track_ids):
     data = json.loads(response.text)
     track_images = extract.track_images(data)
     return track_images
+
+
+# GET the images of artists
+def get_artist_images(auth_header, artist_ids):
+    endpoint = "{}/artists?ids={}".format(base_url, artist_ids)
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    artist_images = extract.artist_images(data)
+    return artist_images
 
 
 # GET audio features for several tracks and store necessary datapoints
@@ -213,68 +221,110 @@ def display_top_data():
 
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    top_artist_data = get_top_artist_data(auth_header, 'long_term', '10', 'name')
-    top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
-    recent_tracks_data = get_recent_tracks_data(auth_header, '30')
-    recent_track_ids = get_recent_tracks_ids(auth_header, '30')
+    recent_tracks_data = get_recent_tracks_data(auth_header, '50')
+    recent_track_ids = get_recent_tracks_ids(auth_header, '50')
     track_images = get_track_images(auth_header, recent_track_ids)
 
 
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
-        return render_template("in.html", artists=top_artist_data, tracks=top_tracks_data,
-                                recent=recent_tracks_data[0], related=0)
+        return render_template("index.html", recent=recent_tracks_data[0], related=0, 
+                                images=track_images)
     else:
         related_artists = get_related_artists(auth_header, recent_tracks_data[1])
         frequent_artist = get_frequent_artist(auth_header, recent_tracks_data[1])
-        return render_template("in.html", artists=top_artist_data, tracks=top_tracks_data,
-                                recent=recent_tracks_data[0], related=related_artists, 
-                                frequent=frequent_artist, images=track_images)
+        return render_template("index.html", recent=recent_tracks_data[0], related=related_artists, 
+                                images=track_images, frequent=frequent_artist)
+
+
+# Function that returns the image urls of the top tracks
+def get_top_track_images(auth_header, tracks):
+    lst = []
+    for item in tracks:
+        track_id = item[1]
+        lst.append(track_id)
+    track_ids = ','.join(lst)
+    images = get_track_images(auth_header, track_ids)
+    return images
+
+
+# Function that returns the image urls of the top artists
+def get_top_artist_images(auth_header, artists):
+    lst = []
+    for item in artists:
+        artist_id = item[1]
+        lst.append(artist_id)
+    artist_ids = ','.join(lst)
+    images = get_artist_images(auth_header, artist_ids)
+    return images
+
+
+# Function that can be called by a route based on term length
+def display_top_tracks(term_length):
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    top_tracks_data = get_top_tracks_data(auth_header, term_length, '30')
+    images = get_top_track_images(auth_header, top_tracks_data)
+    return (top_tracks_data, images)
+
+
+#
+def display_top_artists(term_length):
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    top_artist_data = get_top_artist_data(auth_header, term_length, '30')
+    images = get_top_artist_images(auth_header, top_artist_data)
+    return (top_artist_data, images)
 
 
 # Page for viewing top tracks in the past 1 month
 @app.route("/top-tracks-short-term")
 def display_top_tracks_short_term():
-    # Obtain the access token from where it is stored
-    f = open("token.txt", "r")
-    access_token = f.readline()
-    
-    # Use the token to get the necessary authorization header and access data
-    auth_header = {"Authorization": "Bearer {}".format(access_token)}
-
-    top_tracks_data = get_top_tracks_data(auth_header, 'short_term', '20', 'name')
-
-    return render_template("tr.html", top_tracks=top_tracks_data)
+    data = display_top_tracks('short_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
 
 
 # Page for viewing top tracks in the past 6 months
 @app.route("/top-tracks-medium-term")
 def display_top_tracks_medium_term():
-    # Obtain the access token from where it is stored
-    f = open("token.txt", "r")
-    access_token = f.readline()
-    
-    # Use the token to get the necessary authorization header and access data
-    auth_header = {"Authorization": "Bearer {}".format(access_token)}
-
-    top_tracks_data = get_top_tracks_data(auth_header, 'medium_term', '20', 'name')
-
-    return render_template("tr.html", top_tracks=top_tracks_data)
+    data = display_top_tracks('medium_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
 
 
 # Page for viewing all time top tracks
 @app.route("/top-tracks-long-term")
-def display_top_tracks():
-    # Obtain the access token from where it is stored
-    f = open("token.txt", "r")
-    access_token = f.readline()
-    
-    # Use the token to get the necessary authorization header and access data
-    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+def display_top_tracks_long_term():
+    data = display_top_tracks('long_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1])
 
-    top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '20', 'name')
 
-    return render_template("tr.html", top_tracks=top_tracks_data)
+# 
+@app.route("/top-artists-short-term")
+def display_top_artists_short_term():
+    data = display_top_artists('short_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1])
+
+
+#
+@app.route("/top-artists-medium-term")
+def display_top_artists_medium_term():
+    data = display_top_artists('medium_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1])
+
+
+#
+@app.route("/top-artists-long-term")
+def display_top_artists_long_term():
+    data = display_top_artists('long_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1])
 
 
 # Page for viewing top tracks grouped by artist
@@ -286,7 +336,6 @@ def display_top_tracks_by_artist():
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
     # Render HTML with the desired data
