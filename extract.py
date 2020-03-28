@@ -32,7 +32,7 @@ def recent_track_ids(data):
 def track_images(data):
     images = []
     for item in data['tracks']:
-        image = item['album']['images'][1]['url']
+        image = item['album']['images'][0]['url']
         images.append(image)
     return images
 

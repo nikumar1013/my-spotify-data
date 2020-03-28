@@ -22,7 +22,7 @@ token_url = "https://accounts.spotify.com/api/token"
 base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
-redirect_uri = "http://127.0.0.1:8080/home"
+redirect_uri = "http://127.0.0.1:8080/welcome"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # Image folder configuration
@@ -202,7 +202,7 @@ def index():
 
 
 # Homepage of application
-@app.route("/home")
+@app.route("/welcome")
 def display_top_data():
     # Obtain an access token either by generating a new one or retrieving from storage
     f = open("token.txt", "r")
@@ -231,6 +231,17 @@ def display_top_data():
                                 recent=recent_tracks_data[0], related=related_artists, 
                                 frequent=frequent_artist, images=track_images)
 
+# Page for viewing top tracks
+@app.route("/top-tracks")
+def display_top_tracks():
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+    return render_template("tr.html")
+
 
 # Page for viewing top tracks grouped by artist
 @app.route("/top-tracks-by-artist")
@@ -241,7 +252,6 @@ def display_top_tracks_by_artist():
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    sns.set_style("dark")
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
     # Render HTML with the desired data
