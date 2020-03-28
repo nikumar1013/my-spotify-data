@@ -137,7 +137,6 @@ def get_recent_tracks_ids(auth_header, limit):
 def get_track_images(auth_header, track_ids):
     endpoint = "{}/tracks?ids={}".format(base_url, track_ids)
     response = requests.get(endpoint, headers=auth_header)
-    #print("\nTHIS IS THE RESPONSE\n\n{}\n\n\n".format(response.text))
     data = json.loads(response.text)
     track_images = extract.track_images(data)
     return track_images
@@ -203,7 +202,6 @@ def get_tracks_from_playlist(auth_header, list_id, person_type):
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
     datapoints = get_dataframe(auth_header, data, person_type)
-   # print(datapoints)
     return datapoints
 
 
@@ -251,7 +249,6 @@ def get_top_track_images(auth_header, tracks):
         track_id = item[1]
         lst.append(track_id)
     track_ids = ','.join(lst)
-    #print("\n\nTRACK IDS\n\n{}\n\n".format(track_ids))
     images = get_track_images(auth_header, track_ids)
     return images
 
@@ -296,7 +293,6 @@ def display_top_artists(term_length):
 # Page for viewing top tracks in the past 1 month
 @app.route("/top-tracks-short-term")
 def display_top_tracks_short_term():
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNOICE SHORT TERM \n\n\n\n\n\n\n\n\n\n\n\n")
     data = display_top_tracks('short_term')
     return render_template("toptracks.html", top_tracks=data[0], images=data[1])
 
