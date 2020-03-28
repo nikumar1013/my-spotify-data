@@ -196,6 +196,33 @@ def get_dataframe(auth_header, data, label):
     return df
 
 
+# 
+def make_radar_chart():
+    df = pd.DataFrame({
+    'group': ['A','B','C','D'],
+    'var1': [38, 1.5, 30, 4],
+    'var2': [29, 10, 9, 34],
+    'var3': [8, 39, 23, 24],
+    'var4': [7, 31, 33, 14],
+    'var5': [28, 15, 32, 14]
+    })
+    categories=list(df)[1:]
+    N = len(categories)
+    values=df.loc[0].drop('group').values.flatten().tolist()
+    values += values[:1]
+    angles = [n / float(N) * 2 * pi for n in range(N)]
+    angles += angles[:1]
+ 
+    # ax = plt.subplot(111, polar=True)
+    # plt.xticks(angles[:-1], categories, color='grey', size=8)
+    # ax.set_rlabel_position(0)
+    # plt.yticks([10,20,30], ["10","20","30"], color="grey", size=7)
+    # plt.ylim(0,40)
+    # ax.plot(angles, values, linewidth=1, linestyle='solid')
+    # ax.fill(angles, values, 'b', alpha=0.1)
+    #fig.savefig("/static/radar.png")
+
+
 # GET the tracks from a playlist
 def get_tracks_from_playlist(auth_header, list_id, person_type):
     endpoint = "{}/playlists/{}/tracks".format(base_url, list_id)
@@ -229,7 +256,6 @@ def display_top_data():
     recent_tracks_data = get_recent_tracks_data(auth_header, '50')
     recent_track_ids = get_recent_tracks_ids(auth_header, '50')
     track_images = get_track_images(auth_header, recent_track_ids)
-
 
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
@@ -289,87 +315,76 @@ def display_top_artists(term_length):
     images = get_top_artist_images(auth_header, top_artist_data)
     return (top_artist_data, images)
 
-def make_radar_chart():
-    df = pd.DataFrame({
-    'group': ['A','B','C','D'],
-    'var1': [38, 1.5, 30, 4],
-    'var2': [29, 10, 9, 34],
-    'var3': [8, 39, 23, 24],
-    'var4': [7, 31, 33, 14],
-    'var5': [28, 15, 32, 14]
-    })
-    categories=list(df)[1:]
-    N = len(categories)
-    values=df.loc[0].drop('group').values.flatten().tolist()
-    values += values[:1]
-    angles = [n / float(N) * 2 * pi for n in range(N)]
-    angles += angles[:1]
- 
-    # ax = plt.subplot(111, polar=True)
-    # plt.xticks(angles[:-1], categories, color='grey', size=8)
-    # ax.set_rlabel_position(0)
-    # plt.yticks([10,20,30], ["10","20","30"], color="grey", size=7)
-    # plt.ylim(0,40)
-    # ax.plot(angles, values, linewidth=1, linestyle='solid')
-    # ax.fill(angles, values, 'b', alpha=0.1)
-    #fig.savefig("/static/radar.png")
-# Page for viewing top tracks in the past 1 month
-@app.route("/top-tracks-short-term")
-def display_top_tracks_short_term():
-    data = display_top_tracks('short_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="active", med_link_status="", long_link_status="") 
 
-
-# Page for viewing top tracks in the past 6 months
-@app.route("/top-tracks-medium-term")
-def display_top_tracks_medium_term():
-    data = display_top_tracks('medium_term')
-    toggle = "False"
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", med_link_status="active", long_link_status="") 
-
-
-# Page for viewing all time top tracks
-@app.route("/top-tracks-long-term")
-def display_top_tracks_long_term():
-    data = display_top_tracks('long_term')
-    toggle = "False"
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", med_link_status="", long_link_status="active") 
-
-
-# 
-@app.route("/top-artists-short-term")
-def display_top_artists_short_term():
-    data = display_top_artists('short_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1])
-
-
-#
-@app.route("/top-artists-medium-term")
-def display_top_artists_medium_term():
-    data = display_top_artists('medium_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1])
-
-
-#
-@app.route("/top-artists-long-term")
-def display_top_artists_long_term():
-    data = display_top_artists('long_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1])
-
-
-# Page for viewing top tracks grouped by artist
-@app.route("/top-tracks-by-artist")
-def display_top_tracks_by_artist():
+# Function that can be called by a route based on term length
+def display_top_tracks_by_artist(term_length):
     # Obtain the access token from where it is stored
     f = open("token.txt", "r")
     access_token = f.readline()
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
+    data = get_top_tracks_by_artist(auth_header)
+    lst = []
+    for item in data:
+        lst.append(item)
+    images = get_top_artist_images(auth_header, lst)
+    return (data, images)
 
-    # Render HTML with the desired data
-    return render_template("tracks.html", content=top_tracks_by_artist_data)
+
+# Page for viewing top tracks in the past 1 month
+@app.route("/top-tracks-short-term")
+def display_top_tracks_short_term():
+    data = display_top_tracks('short_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="active", 
+                            med_link_status="", long_link_status="") 
+
+
+# Page for viewing top tracks in the past 6 months
+@app.route("/top-tracks-medium-term")
+def display_top_tracks_medium_term():
+    data = display_top_tracks('medium_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", 
+                            med_link_status="active", long_link_status="") 
+
+
+# Page for viewing all time top tracks
+@app.route("/top-tracks-long-term")
+def display_top_tracks_long_term():
+    data = display_top_tracks('long_term')
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", 
+                            med_link_status="", long_link_status="active") 
+
+
+# Page for viewing top artists in the past month
+@app.route("/top-artists-short-term")
+def display_top_artists_short_term():
+    data = display_top_artists('short_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="active", 
+                            med_link_status="", long_link_status="") 
+
+
+# Page for viewing top artists in the past 6 months
+@app.route("/top-artists-medium-term")
+def display_top_artists_medium_term():
+    data = display_top_artists('medium_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="", 
+                            med_link_status="active", long_link_status="") 
+
+
+# Page for viewing all time top artists
+@app.route("/top-artists-long-term")
+def display_top_artists_long_term():
+    data = display_top_artists('long_term')
+    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="", 
+                            med_link_status="", long_link_status="active") 
+
+
+# Page for viewing top tracks grouped by artist
+@app.route("/top-tracks-by-artist")
+def display_top_tracks_by_artist_short_term():
+    data = display_top_tracks_by_artist('short_term')
+    return render_template("toptracksbyartist.html", content=data[0], images=data[1])
 
 
 # Page for viewing an audio analysis graphS
@@ -400,7 +415,7 @@ def audio_analysis():
 
 
 # Page for viewing a user's sentiment analysis
-@app.route("/predict-personality")
+@app.route("/personality-analysis")
 def predict_personality():
     f = open("token.txt", "r")
     access_token = f.readline()

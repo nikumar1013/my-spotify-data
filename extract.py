@@ -48,6 +48,7 @@ def track_images(data):
             if status == 400:
                 return images
 
+
 # Returns a list of urls for artist profile images
 def artist_images(data):
     images = []
@@ -114,8 +115,8 @@ def top_tracks_by_artist(top_tracks, top_artists):
         tracks = []
         for track in top_tracks:
             track_artist = top_tracks.get(track)
-            if artist == track_artist:
-                tracks.append(track)
+            if artist[0] == track_artist:
+                tracks.append(track[0])
         if len(tracks) > 0:
         	top_tracks_by_artist[artist] = tracks
     return top_tracks_by_artist

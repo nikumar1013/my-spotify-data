@@ -32,7 +32,7 @@
             <a class="nav-link" href="/top-tracks-short-term">Your Top Tracks</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/top-artists">Your Top Artists</a>
+            <a class="nav-link" href="/top-artists-short-term">Your Top Artists</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/top-tracks-by-artist">Your Top Tracks by Artist</a>
@@ -60,8 +60,8 @@
 
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
-        <h1 class="h1-size">Top Artists</h1>
-        <h5 class="text-muted thin">The geniuses behind your favorite songs</h5>
+        <h1 class="h1-size">Top Tracks by Artist</h1>
+        <h5 class="text-muted thin">Your favorite songs grouped by your favorite artists</h5>
     </div>
     <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
         <li class="nav-item waves-effect waves-light">
@@ -77,8 +77,8 @@
     <div class="tab-content">
         <div class="tab-pane fade in pt-4 active show" id=short-term role="tabpanel">
             <div class="row">
-                {% for item in top_artists %}
-                <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                {% for item in content %}
+                <div class="col-xl-3 col-lg-2 col-md-4 col-sm-6 col-xs-12">
                     <div class="card mb-3">
                         <div class="view overlay zoom">
                             <img class="card-img-top cover" src={{images[loop.index0]}}>
@@ -86,7 +86,10 @@
                         <div class="card-body">
                             <h4 class="card-title song-title">{{item[0]}}</h4>
                         </div>
-                        <span class="badge badge-pill badge-success left-badge"><font color="black">{{loop.index}}</font></span>
+                        {% for track in content[item] %}
+                        <span class="badge badge-pill badge-success left-badge"><font color="black">{{track}}</font></span>
+                        <br>
+                        {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
