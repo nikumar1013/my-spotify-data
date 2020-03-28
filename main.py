@@ -129,6 +129,7 @@ def get_recent_tracks_ids(auth_header, limit):
     response = requests.get(endpoint, headers=auth_header)
     data = json.loads(response.text)
     recent_track_ids = extract.recent_track_ids(data)
+    print(len(recent_track_ids))
     result = ','.join(recent_track_ids)
     return result
 

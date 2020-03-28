@@ -23,7 +23,8 @@ def recent_track_ids(data):
     tracks = []
     for item in data['items']:
         track_id = item['track']['id']
-        tracks.append(track_id)
+        if track_id not in tracks:
+            tracks.append(track_id)
     return tracks
 
 
