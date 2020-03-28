@@ -231,8 +231,39 @@ def display_top_data():
                                 recent=recent_tracks_data[0], related=related_artists, 
                                 frequent=frequent_artist, images=track_images)
 
-# Page for viewing top tracks
-@app.route("/top-tracks")
+
+# Page for viewing top tracks in the past 1 month
+@app.route("/top-tracks-short-term")
+def display_top_tracks_short_term():
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+
+    top_tracks_data = get_top_tracks_data(auth_header, 'short_term', '20', 'name')
+
+    return render_template("tr.html", top_tracks=top_tracks_data)
+
+
+# Page for viewing top tracks in the past 6 months
+@app.route("/top-tracks-medium-term")
+def display_top_tracks_medium_term():
+    # Obtain the access token from where it is stored
+    f = open("token.txt", "r")
+    access_token = f.readline()
+    
+    # Use the token to get the necessary authorization header and access data
+    auth_header = {"Authorization": "Bearer {}".format(access_token)}
+
+    top_tracks_data = get_top_tracks_data(auth_header, 'medium_term', '20', 'name')
+
+    return render_template("tr.html", top_tracks=top_tracks_data)
+
+
+# Page for viewing all time top tracks
+@app.route("/top-tracks-long-term")
 def display_top_tracks():
     # Obtain the access token from where it is stored
     f = open("token.txt", "r")
@@ -240,7 +271,10 @@ def display_top_tracks():
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    return render_template("tr.html")
+
+    top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '20', 'name')
+
+    return render_template("tr.html", top_tracks=top_tracks_data)
 
 
 # Page for viewing top tracks grouped by artist
@@ -252,6 +286,7 @@ def display_top_tracks_by_artist():
     
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
+
     top_tracks_by_artist_data = get_top_tracks_by_artist(auth_header)
 
     # Render HTML with the desired data

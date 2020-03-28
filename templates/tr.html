@@ -29,7 +29,7 @@
             <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/top-tracks">Your Top Tracks</a>
+            <a class="nav-link" href="/top-tracks-short-term">Your Top Tracks</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/top-artists">Your Top Artists</a>
@@ -61,19 +61,38 @@
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
         <h1 class="h1-size">Top Tracks</h1>
-        <h5 class="text-muted thin">The songs you love most.</h5>
+        <h5 class="text-muted thin">The songs you love the most.</h5>
     </div>
     <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link active" data-toggle="tab" href="/short-term" role="tab" aria-selected="true">Past 1 Month</a>
+            <a class="nav-link" data-toggle="tab" href="/top-tracks-short-term" role="tab" aria-selected="true">Past 1 Month</a>
         </li>
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link" data-toggle="tab" href="/medium-term" role="tab" aria-selected="false">Past 6 Months</a>
+            <a class="nav-link" data-toggle="tab" href="/top-tracks-medium-term" role="tab" aria-selected="false">Past 6 Months</a>
         </li>
         <li class="nav-item waves-effect waves-light">
-            <a class="nav-link" data-toggle="tab" href="/long-tern" role="tab" aria-selected="false">All Time</a>
+            <a class="nav-link" data-toggle="tab" href="/top-tracks-long-term" role="tab" aria-selected="true">All Time</a>
         </li>
     </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in pt-4 active show" id=short-term role="tabpanel">
+            <div class="row">
+                {% for item in top_tracks %}
+                <div class="col-xl-3 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                        <div class="card mb-3">
+                        <div class="view overlay zoom">
+
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title song-title">{{item}}</h4>
+                            <p class="card-text song-sub">{{top_tracks[item]}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 
 
