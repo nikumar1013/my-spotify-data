@@ -16,6 +16,7 @@
     <link href="https://cdn.mkn.cx/Manrope/index.css" rel="stylesheet">
     <link href="https://cdn.mkn.cx/MDB/css/mdb.min.css" rel="stylesheet">
 </head>
+<body style="background-color: #0f0f0f;">
 
 <!-- Navbar Code -->
 <nav class="navbar navbar-expand-lg navbar-dark black">
@@ -60,8 +61,8 @@
 
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
-        <h1 class="h1-size">Top Artists</h1>
-        <h5 class="text-muted thin">The geniuses behind your favorite songs</h5>
+        <h1 class="h1-size"><font color="white">Top Artists</font></h1>
+        <h5 class="text-muted thin"><font color="white">The ones who create the songs you love</font></h5>
     </div>
     <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
         <li class="nav-item waves-effect waves-light">
@@ -79,7 +80,7 @@
             <div class="row">
                 {% for item in top_artists %}
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                    <div class="card mb-3">
+                    <div class="card text-white bg-dark mb-3">
                         <div class="view overlay zoom">
                             <img class="card-img-top cover" src={{images[loop.index0]}}>
                         </div>

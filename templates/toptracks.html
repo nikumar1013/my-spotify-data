@@ -1,5 +1,4 @@
 <html>
-<body style="background-color: darkgray;">
 <head>
     <title>My Spotify Data</title>
     <meta content="A place to view your Spotify stats." property="og:description">
@@ -17,6 +16,7 @@
     <link href="https://cdn.mkn.cx/Manrope/index.css" rel="stylesheet">
     <link href="https://cdn.mkn.cx/MDB/css/mdb.min.css" rel="stylesheet">
 </head>
+<body style="background-color: #0f0f0f;">
 
 <!-- Navbar Code -->
 <nav class="navbar navbar-expand-lg navbar-dark black">
@@ -61,8 +61,8 @@
 <!-- Display Data -->
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
-        <h1 class="h1-size">Top Tracks</h1>
-        <h5 class="text-muted thin">The songs you love the most</h5>
+        <h1 class="h1-size"><font color="white">Top Tracks</font></h1>
+        <h5 class="text-muted thin"><font color="white">The songs you love the most</font></h5>
     </div>
     <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
         <li class="nav-item waves-effect waves-light">
@@ -80,7 +80,7 @@
             <div class="row">
                 {% for item in top_tracks %}
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                    <div class="card mb-3">
+                    <div class="card text-white bg-dark mb-3">
                         <div class="view overlay zoom">
                             <img class="card-img-top cover" src={{images[loop.index0]}}>
                         </div>
