@@ -114,13 +114,22 @@ def get_audio_datapoints(data):
     datapoints['energy'] = []
     datapoints['instrumentalness'] = []
     datapoints['tempo'] = []
+    datapoints['acousticness'] = []
+    datapoints['valence'] = []
+    datapoints['liveness'] = []
+    datapoints['loudness'] = []
+    datapoints['speechiness'] = []
     for category in data['audio_features']:
         if category is not None:
             datapoints['danceability'].append(category['danceability'])
             datapoints['energy'].append(category['energy'])
             datapoints['instrumentalness'].append(category['instrumentalness'])
             datapoints['tempo'].append(category['tempo'])
-   # print(datapoints)
+            datapoints['acousticness'].append(category['acousticness'])
+            datapoints['valence'].append(category['valence'])
+            datapoints['liveness'].append(category['liveness'])
+            datapoints['loudness'].append(category['loudness'])
+            datapoints['speechiness'].append(category['speechiness'])
     return datapoints
 
 
