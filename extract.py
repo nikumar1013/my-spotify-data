@@ -1,3 +1,4 @@
+import json
 # Returns a list of the user's top 10 artists
 def top_artists(data):
     artists = []
@@ -35,19 +36,32 @@ def recent_track_ids(data):
 # Returns a list of urls for track artworks
 def track_images(data):
     images = []
-    for item in data['tracks']:
-        image = item['album']['images'][0]['url']
-        images.append(image)
-    return images
-
+    try:
+        for item in data['tracks']:
+            image = item['album']['images'][0]['url']
+            images.append(image)
+        return images
+    except:
+        if(data['error']):
+            error = data['error']
+            status = error['status']
+            if(status == 400):
+                return images
 
 # Returns a list of urls for artist profile images
 def artist_images(data):
     images = []
-    for item in data['artists']:
-        image = item['images'][0]['url']
-        images.append(image)
-    return images
+    try:
+        for item in data['artists']:
+            image = item['images'][0]['url']
+            images.append(image)
+        return images
+    except:
+        if(data['error']):
+            error = data['error']
+            status = error['status']
+            if(status == 400):
+                return images
 
 
 # Returns a dictionary with recently listened to tracks grouped by artist
