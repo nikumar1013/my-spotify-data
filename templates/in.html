@@ -72,21 +72,21 @@
 <div class="mt-5 pl-5 pr-5 container wide">
     <h4 class="mb-4">Your 30 recently played tracks:</h4>
     <div class="row">
-        <header>
-            {% for item in recent %}
-            <div class="col-2">
+        {% for item in recent %}
+        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+        <!-- <div class="col-2" style="width:300px;height:250px;"> -->
+            <!-- <div class="card mb-3" style="width:300px;height:200px;"> -->
                 <div class="card mb-3">
-                    <div class="view overlay zoom">
-                        <img class="card-img-top cover" src="https://www.scdn.co/i/_global/open-graph-default.png">
-                    </div>
-                    <div class="card-body">
-                        <h4 class="card-title song-title">{{item}}</h4>
-                        <p class="card-text song-sub">{{recent[item][0]}}</p>
-                    </div>
+                <div class="view overlay zoom">
+                    <img class="card-img-top cover" src={{images[loop.index0]}}>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title song-title">{{item}}</h4>
+                    <p class="card-text song-sub">{{recent[item][0]}}</p>
                 </div>
             </div>
-            {% endfor %}
-        </header>
+        </div>
+        {% endfor %}
     </div>
 
     <h4 class="mb-4 mt-4">Weekly Artists</h4>

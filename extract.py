@@ -27,6 +27,15 @@ def recent_track_ids(data):
     return tracks
 
 
+# Returns a list of urls for track artworks
+def track_images(data):
+    images = []
+    for item in data['tracks']:
+        image = item['album']['images'][1]['url']
+        images.append(image)
+    return images
+
+
 # Returns a dictionary with recently listened to tracks grouped by artist
 def recent_tracks(data):
     recents = {}

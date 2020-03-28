@@ -132,9 +132,14 @@ def get_recent_tracks_ids(auth_header, limit):
     result = ','.join(recent_track_ids)
     return result
 
+
 # GET the artwork of tracks
 def get_track_images(auth_header, track_ids):
-    endpoint = "{}/tracks?ids={}".format(base_url)
+    endpoint = "{}/tracks?ids={}".format(base_url, track_ids)
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    track_images = extract.track_images(data)
+    return track_images
 
 
 # GET audio features for several tracks and store necessary datapoints
@@ -211,18 +216,19 @@ def display_top_data():
     top_tracks_data = get_top_tracks_data(auth_header, 'long_term', '10', 'name')
     recent_tracks_data = get_recent_tracks_data(auth_header, '30')
     recent_track_ids = get_recent_tracks_ids(auth_header, '30')
-    
+    track_images = get_track_images(auth_header, recent_track_ids)
+
 
     # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
     if recent_tracks_data[1] is None:
         return render_template("in.html", artists=top_artist_data, tracks=top_tracks_data,
-                                recent=recent_tracks_data[0],related=0)
+                                recent=recent_tracks_data[0], related=0)
     else:
         related_artists = get_related_artists(auth_header, recent_tracks_data[1])
         frequent_artist = get_frequent_artist(auth_header, recent_tracks_data[1])
         return render_template("in.html", artists=top_artist_data, tracks=top_tracks_data,
                                 recent=recent_tracks_data[0], related=related_artists, 
-                                frequent=frequent_artist)
+                                frequent=frequent_artist, images=track_images)
 
 
 # Page for viewing top tracks grouped by artist
