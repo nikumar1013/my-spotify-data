@@ -1,4 +1,5 @@
 import json
+
 # Returns a list of the user's top 10 artists
 def top_artists(data):
     artists = []
