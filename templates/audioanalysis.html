@@ -61,25 +61,34 @@
 <!-- Content -->
 <div class="container wide">
     <div class="text-center mt-4 pt-2 pb-4">
-        <h1 class="h1-size"><font color="white">Top Tracks by Artist</font></h1>
-        <h5 class="text-muted thin"><font color="white">Your all time favorite songs grouped by your all time favorite artists</font></h5>
+        <h1 class="h1-size"><font color="white">Audio Analysis</font></h1>
+        <h5 class="text-muted thin"><font color="white">View graphed data of your music's audio features</font></h5>
     </div>
+    <ul class="nav nav-tabs md-tabs nav-justified elegant-color-dark" role="tablist">
+        <li class="nav-item waves-effect waves-light">
+            <a class="nav-link {{short_link_status}}" data-toggle="tab" href="/top-tracks-short-term" role="tab" aria-selected="false">Past 1 Month</a>
+        </li>
+        <li class="nav-item waves-effect waves-light">
+            <a class="nav-link {{med_link_status}}" data-toggle="tab" href="/top-tracks-medium-term" role="tab" aria-selected="false">Past 6 Months</a>
+        </li>
+        <li class="nav-item waves-effect waves-light">
+            <a class="nav-link {{long_link_status}}" data-toggle="tab" href="/top-tracks-long-term" role="tab" aria-selected="false">All Time</a>
+        </li>
+    </ul>
     <div class="tab-content">
         <div class="tab-pane fade in pt-4 active show" id=short-term role="tabpanel">
             <div class="row">
-                {% for item in content %}
-                <div class="col-xl-3 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                {% for item in top_tracks %}
+                <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 col-xs-12">
                     <div class="card text-white bg-dark mb-3">
                         <div class="view overlay zoom">
                             <img class="card-img-top cover" src={{images[loop.index0]}}>
                         </div>
                         <div class="card-body">
                             <h4 class="card-title song-title">{{item[0]}}</h4>
+                            <p class="card-text song-sub">{{top_tracks[item]}}</p>
                         </div>
-                        {% for track in content[item] %}
-                        <span class="badge badge-pill badge-success left-badge"><font color="black">{{track}}</font></span>
-                        <br>
-                        {% endfor %}
+                        <span class="badge badge-pill badge-success left-badge"><font color="black">{{loop.index}}</font></span>
                     </div>
                 </div>
                 {% endfor %}
@@ -87,3 +96,5 @@
         </div>
     </div>
 </div>
+</body>
+</html>
