@@ -163,10 +163,10 @@ def do_audio_analysis(auth_header, track_ids):
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
-    df['Song Number'] = range(1, len(datapoints[tag]) + 1)
+    df['Recent Songs'] = range(1, len(datapoints[tag]) + 1)
     y_title = tag.capitalize()
     df[y_title] = datapoints[tag]
-    sns_plot = sns.barplot(x="Song Number", y=y_title, data=df)
+    sns_plot = sns.barplot(x="Recent Songs", y=y_title, data=df)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)     # Should change this to relative size of the screen
     fig.savefig('static/{t}.png'.format(t=tag))
@@ -440,6 +440,19 @@ def predict_personality():
 @app.route("/logout")
 def logout():
     return redirect("https://www.spotify.com/logout/")
+
+
+# Disables image caching
+@app.after_request
+def disable_cache(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
 # Run the server
