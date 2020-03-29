@@ -39,7 +39,6 @@ auth_query = {
     "client_id": client_id
 }
 
-
 # Returns a token needed to access the Spotify API
 def generate_access_token():
     # Requests refresh and access tokens (POST)
@@ -166,7 +165,8 @@ def make_graph(datapoints, tag):
     df['Recent Songs'] = range(1, len(datapoints[tag]) + 1)
     y_title = tag.capitalize()
     df[y_title] = datapoints[tag]
-    sns_plot = sns.barplot(x="Recent Songs", y=y_title, data=df)
+    title = y_title + " ratings of your most recent songs"
+    sns_plot = sns.barplot(x="Recent Songs", y=y_title, data=df).set_title(title)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)     # Should change this to relative size of the screen
     fig.savefig('static/{t}.png'.format(t=tag))
