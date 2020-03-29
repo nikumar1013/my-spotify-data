@@ -431,7 +431,7 @@ def predict_personality():
     frame_list.append(get_tracks_from_playlist(auth_header,"0gY3yNHzIQ2zyIi8l4faO6",1))#compassion
     frame_list.append(get_tracks_from_playlist(auth_header,"0B0XVWCgz51yb8G0DPu7RO",0))#outgoing
     result = pd.concat(frame_list)
-    result.to_csv(r'D:\Programming\spotify-data-app\tracks.csv', index = True)
+    result.to_csv(r'tracks.csv', index = True)
     make_radar_chart()
     return render_template("person.html")
 
