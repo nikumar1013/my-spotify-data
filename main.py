@@ -420,16 +420,27 @@ def predict_personality():
     f = open("token.txt", "r")
     access_token = f.readline()
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    frame_list = []
     """
     3 Personality types instead of 5 
     Outgoing/extraversion/energetic Type A - 0
     Mellow/Chill/peaceful Type B = 1
-    Submissive/conformist/passive Type C = 2
+    Submissive/conformist/passive  Type C = 2
     """
-    frame_list.append(get_tracks_from_playlist(auth_header,"0VHCKkJwUDBRry4JWOcDwF",2))#sensitive
-    frame_list.append(get_tracks_from_playlist(auth_header,"0gY3yNHzIQ2zyIi8l4faO6",1))#compassion
-    frame_list.append(get_tracks_from_playlist(auth_header,"0B0XVWCgz51yb8G0DPu7RO",0))#outgoing
+    frame_list = []
+    outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75'] # 476 Songs
+    mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT']#300 something
+    passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro'] #413
+
+    for item in passive_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
+    print("Done 1")
+    for item in mellow_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
+    print("DOne 2")
+    for item in outgoing_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
+    print("Done 3")
+
     result = pd.concat(frame_list)
     result.to_csv(r'tracks.csv', index = True)
     make_radar_chart()
