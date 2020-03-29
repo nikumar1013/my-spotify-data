@@ -388,7 +388,7 @@ def display_top_tracks_by_artist_short_term():
 
 
 # Page for viewing an audio analysis graphS
-@app.route("/audio-analysis", methods=['GET'])
+@app.route("/audio-analysis")
 def audio_analysis():
     # Obtain the access token from where it is stored
     f = open("token.txt", "r")
@@ -411,7 +411,7 @@ def audio_analysis():
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
     img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    return render_template("audio.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
+    return render_template("audioanalysis.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
 
 
 # Page for viewing a user's sentiment analysis

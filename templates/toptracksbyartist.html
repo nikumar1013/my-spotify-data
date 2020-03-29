@@ -10,9 +10,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/css/mdb.min.css" rel="stylesheet">
-    <!-- Custom stylesheet -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../static/css/main.css">
-
     <link href="https://cdn.mkn.cx/Manrope/index.css" rel="stylesheet">
     <link href="https://cdn.mkn.cx/MDB/css/mdb.min.css" rel="stylesheet">
 </head>
@@ -21,7 +20,7 @@
 <!-- Navbar Code -->
 <nav class="navbar navbar-expand-lg navbar-dark black">
     <a class="navbar-brand" href="/"><font color="#1DB954">My Spotify Data</font></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarOptions" aria-controls="navbarOptions" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -60,12 +59,12 @@
 
 <!-- Content -->
 <div class="container wide">
-    <div class="text-center mt-4 pt-2 pb-4">
+    <div class="text-center mt-4 pt-2 pb-0">
         <h1 class="h1-size"><font color="white">Top Tracks by Artist</font></h1>
         <h5 class="text-muted thin"><font color="white">Your all time favorite songs grouped by your all time favorite artists</font></h5>
     </div>
     <div class="tab-content">
-        <div class="tab-pane fade in pt-4 active show" id=short-term role="tabpanel">
+        <div class="tab-pane fade in pt-4 active show" role="tabpanel">
             <div class="row justify-content-center">
                 {% for item in content %}
                 <div class="col-xl-3 col-lg-2 col-md-4 col-sm-6 col-xs-12">
@@ -87,3 +86,15 @@
         </div>
     </div>
 </div>
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>
+
+</body>
+</html>
