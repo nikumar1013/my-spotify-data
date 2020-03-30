@@ -9,7 +9,7 @@ import pandas as pd
 from flask import Flask, request, redirect, g, render_template, Response
 from urllib.parse import quote
 from math import pi
-
+import pickle
 app = Flask(__name__)
     
 # API Keys
@@ -268,6 +268,22 @@ def display_top_data():
                                 images=track_images, frequent=frequent_artist)
 
 
+
+def model_predict(datapoints):
+    df = pd.DataFrame()
+    df['Danceability'] = datapoints['danceability']
+    df['Tempo'] = datapoints['tempo']
+    df['Instrumentalness'] = datapoints['instrumentalness']
+    df['Energy'] = datapoints['energy']
+    df['Acousticness'] = datapoints['acousticness']
+    df['Valence'] = datapoints['valence']
+    df['Liveness'] = datapoints['liveness']
+    df['Loudness'] = datapoints['loudness']
+    df['Speechiness'] = datapoints['speechiness']
+    xgb_loaded = pickle.load(open('xgb.pkl', 'rb'))
+    print(len(df.index))
+    predictions = xgb_loaded.predict(df)
+    return predictions
 # Function that returns the image urls of the top tracks
 def get_top_track_images(auth_header, tracks):
     lst = []
@@ -433,16 +449,16 @@ def predict_personality():
 
     for item in passive_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
-    print("Done 1")
     for item in mellow_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
-    print("DOne 2")
     for item in outgoing_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
-    print("Done 3")
-
     result = pd.concat(frame_list)
-    result.to_csv(r'tracks.csv', index = True)
+    result.to_csv(r'tracks.csv', index = False)
+    track_ids = get_recent_tracks_ids(auth_header, '50')
+    datapoints = do_audio_analysis(auth_header, track_ids)
+    predictions = model_predict(datapoints)
+    print(len(predictions))
     make_radar_chart()
     return render_template("person.html")
 

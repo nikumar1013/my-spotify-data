@@ -45,6 +45,7 @@ filename = 'xgb.pkl'
 model_pkl = open(filename, 'wb')
 pickle.dump(xgb, model_pkl)
 model_pkl.close()
+s = pickle.dumps(xgb)
 
 
 # import tensorflow as tf

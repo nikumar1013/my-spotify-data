@@ -136,7 +136,7 @@ def get_audio_datapoints(data):
     datapoints['loudness'] = []
     datapoints['speechiness'] = []
     for category in data['audio_features']:
-        if category is not None:
+        if category !=  None:
             datapoints['danceability'].append(category['danceability'])
             datapoints['energy'].append(category['energy'])
             datapoints['instrumentalness'].append(category['instrumentalness'])
