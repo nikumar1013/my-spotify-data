@@ -6,10 +6,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import pickle
 from flask import Flask, request, redirect, g, render_template, Response
 from urllib.parse import quote
 from math import pi
-import pickle
+
+
 app = Flask(__name__)
     
 # API Keys
