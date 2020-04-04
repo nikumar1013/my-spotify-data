@@ -1,17 +1,18 @@
 # Authors: Nikhil Kumar, Abhijit Raman, Nicholas Wille
-
 import json
 import requests
 import extract
 import os
 import matplotlib
 import matplotlib.pyplot as plt
+import plotly.express as px
 import seaborn as sns
 import pandas as pd
 import pickle
 from flask import Flask, request, redirect, g, render_template, Response, make_response
 from urllib.parse import quote
 from math import pi
+import numpy as np
 
 app = Flask(__name__)
     
@@ -239,30 +240,31 @@ def get_dataframe(auth_header, data, label):
 
 
 # Creates a radar chart
-def make_radar_chart():
-    df = pd.DataFrame({
-    'group': ['A','B','C','D'],
-    'var1': [38, 1.5, 30, 4],
-    'var2': [29, 10, 9, 34],
-    'var3': [8, 39, 23, 24],
-    'var4': [7, 31, 33, 14],
-    'var5': [28, 15, 32, 14]
-    })
-    categories=list(df)[1:]
-    N = len(categories)
-    values=df.loc[0].drop('group').values.flatten().tolist()
-    values += values[:1]
-    angles = [n / float(N) * 2 * pi for n in range(N)]
-    angles += angles[:1]
- 
-    # ax = plt.subplot(111, polar=True)
-    # plt.xticks(angles[:-1], categories, color='grey', size=8)
-    # ax.set_rlabel_position(0)
-    # plt.yticks([10,20,30], ["10","20","30"], color="grey", size=7)
-    # plt.ylim(0,40)
-    # ax.plot(angles, values, linewidth=1, linestyle='solid')
-    # ax.fill(angles, values, 'b', alpha=0.1)
-    # fig.savefig("/static/radar.png")
+def make_radar_chart(predictions):
+    labels = np.array(["Outgoing", "Mellow", "Introverted"])
+    stats = [0, 0, 0]
+    for num in predictions:
+        if num == 2:
+            stats[0] += 1
+        elif num == 1:
+            stats[1] += 1
+        else:
+            stats[2] += 1
+    stats = np.array(stats)
+    df = pd.DataFrame(dict(
+        r=stats,
+        theta=labels))
+    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
+    stats = np.concatenate((stats,[stats[0]]))
+    angles = np.concatenate((angles,[angles[0]]))
+    fig = plt.figure()
+    ax = fig.add_subplot(111, polar=True)
+    ax.plot(angles, stats, 'o-', linewidth=2)
+    ax.fill(angles, stats, alpha=0.25)
+    ax.set_thetagrids(angles * 180/np.pi, labels)
+    ax.set_title("Personality Graph")
+    ax.grid(True)
+    fig.savefig("static/images/personality.png")
 
 
 # Return predictions from the ML model
@@ -402,26 +404,26 @@ def predict_personality():
     Mellow/Chill/peaceful Type B = 1
     Submissive/conformist/passive  Type C = 2
     """
-    frame_list = []
-    # 476 songs
-    outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
-    # ~300 songs
-    mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT']
-    # 413 songs
-    passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro']
+    # frame_list = []
+    # # 476 songs
+    # outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
+    # # ~300 songs
+    # mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT', '37i9dQZF1DWXe9gFZP0gtP']
+    # # 413 songs
+    # passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro']
 
-    for item in passive_list:
-        frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
-    for item in mellow_list:
-        frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
-    for item in outgoing_list:
-        frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
-    result = pd.concat(frame_list)
-    result.to_csv(r'tracks.csv', index = False)
+    # for item in passive_list:
+    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
+    # for item in mellow_list:
+    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
+    # for item in outgoing_list:
+    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
+    # result = pd.concat(frame_list)
+    # result.to_csv(r'tracks.csv', index = False)
     track_ids = get_recent_tracks_ids(auth_header, '50')
     datapoints = do_audio_analysis(auth_header, track_ids)
     predictions = model_predict(datapoints)
-    make_radar_chart()
+    make_radar_chart(predictions)
     return render_template("person.html")
 
 
