@@ -5,7 +5,6 @@ import extract
 import os
 import matplotlib
 import matplotlib.pyplot as plt
-import plotly.express as px
 import seaborn as sns
 import pandas as pd
 import pickle
@@ -163,7 +162,6 @@ def get_tracks_from_playlist(auth_header, list_id, person_type):
 def display_top_tracks(term_length):
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + access_token)
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_data = get_top_tracks_data(auth_header, term_length, '30')
     images = get_top_track_images(auth_header, top_tracks_data)
@@ -309,7 +307,7 @@ def display_top_data():
 
     # Store HTML rendering in a response and create a cookie for the access token
     response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images))
-    response.set_cookie('token', access_token, max_age=3600)
+    response.set_cookie('token', access_token)
     return response
 
 
