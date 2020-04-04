@@ -1,3 +1,5 @@
+# Authors: Nikhil Kumar, Abhijit Raman, Nicholas Wille
+
 import json
 
 # Returns a list of the user's top 10 artists
@@ -83,32 +85,6 @@ def recent_tracks(data):
     return recents
 
 
-# # Returns the artist id of an artist that the user has been listening to a lot recently
-# def trending_artist(num_listens):
-# 	# Keep track of which artist has the highest number of recent plays
-#     max_plays = 0
-#     result = ""
-#     for artist_id in num_listens:
-#         num_plays = num_listens.get(artist_id)
-#         if num_plays > max_plays:
-#             max_plays = num_plays
-#             result = artist_id
-	
-#     # If that maxiumum is greater than 5, the aritst qualifies as a frequent listen
-#     if max_plays >= 5:
-#         return result
-#     else:
-#         return None
-
-
-# # Returns a list of an artist's related artists
-# def related_artists(data):
-#     result = []
-#     for artist in data['artists']:
-#         result.append(artist['name'])
-#     return result
-
-
 # Returns a dictionary with the top 50 tracks grouped by artist
 def top_tracks_by_artist(top_tracks, top_artists):
     top_tracks_by_artist = {}
@@ -147,6 +123,3 @@ def get_audio_datapoints(data):
             datapoints['loudness'].append(category['loudness'])
             datapoints['speechiness'].append(category['speechiness'])
     return datapoints
-
-
-

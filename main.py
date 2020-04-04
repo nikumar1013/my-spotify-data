@@ -1,3 +1,5 @@
+# Authors: Nikhil Kumar, Abhijit Raman, Nicholas Wille
+
 import json
 import requests
 import extract
@@ -160,6 +162,7 @@ def get_tracks_from_playlist(auth_header, list_id, person_type):
 def display_top_tracks(term_length):
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + access_token)
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_data = get_top_tracks_data(auth_header, term_length, '30')
     images = get_top_track_images(auth_header, top_tracks_data)
@@ -293,7 +296,7 @@ def index():
 def display_top_data():
     # Get an access token from its cookie or generate one if it doesn't exist yet
     access_token = request.cookies.get('token')
-    if access_token is None:
+    if access_token == None:
         access_token = generate_access_token()
 
     # Use the token to get the necessary authorization header and access data
@@ -304,7 +307,7 @@ def display_top_data():
 
     # Store HTML rendering in a response and create a cookie for the access token
     response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images))
-    response.set_cookie('token', access_token, max_age=3600, secure=True)
+    response.set_cookie('token', access_token, max_age=3600)
     return response
 
 
@@ -431,10 +434,6 @@ def logout():
 # Disables image caching
 @app.after_request
 def disable_cache(r):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
