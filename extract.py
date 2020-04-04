@@ -79,34 +79,34 @@ def recent_tracks(data):
             num_listens[artist_id] = num_listens[artist_id] + 1
         else:
             num_listens[artist_id] = 1
-    trending_id = trending_artist(num_listens)
-    return [recents, trending_id]
+    # trending_id = trending_artist(num_listens)
+    return recents
 
 
-# Returns the artist id of an artist that the user has been listening to a lot recently
-def trending_artist(num_listens):
-	# Keep track of which artist has the highest number of recent plays
-    max_plays = 0
-    result = ""
-    for artist_id in num_listens:
-        num_plays = num_listens.get(artist_id)
-        if num_plays > max_plays:
-            max_plays = num_plays
-            result = artist_id
+# # Returns the artist id of an artist that the user has been listening to a lot recently
+# def trending_artist(num_listens):
+# 	# Keep track of which artist has the highest number of recent plays
+#     max_plays = 0
+#     result = ""
+#     for artist_id in num_listens:
+#         num_plays = num_listens.get(artist_id)
+#         if num_plays > max_plays:
+#             max_plays = num_plays
+#             result = artist_id
 	
-    # If that maxiumum is greater than 5, the aritst qualifies as a frequent listen
-    if max_plays >= 5:
-        return result
-    else:
-        return None
+#     # If that maxiumum is greater than 5, the aritst qualifies as a frequent listen
+#     if max_plays >= 5:
+#         return result
+#     else:
+#         return None
 
 
-# Returns a list of an artist's related artists
-def related_artists(data):
-    result = []
-    for artist in data['artists']:
-        result.append(artist['name'])
-    return result
+# # Returns a list of an artist's related artists
+# def related_artists(data):
+#     result = []
+#     for artist in data['artists']:
+#         result.append(artist['name'])
+#     return result
 
 
 # Returns a dictionary with the top 50 tracks grouped by artist

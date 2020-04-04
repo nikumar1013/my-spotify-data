@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import pickle
-from flask import Flask, request, redirect, g, render_template, Response
+from flask import Flask, request, redirect, g, render_template, Response, make_response
 from urllib.parse import quote
 from math import pi
 
@@ -61,10 +61,6 @@ def generate_access_token():
     token_type = response_data["token_type"]
     expires_in = response_data["expires_in"]
 
-    # Store the access token in a file and return the token
-    f = open("token.txt", "w")
-    f.write(access_token)
-    f.close()
     return access_token
 
 
@@ -103,25 +99,25 @@ def get_recent_tracks_data(auth_header, limit):
     return recent_tracks_data
 
 
-# GET an artist's related artists
-def get_related_artists(auth_header, artist_id):
-    if artist_id is None:
-        return None
-    endpoint = "{}/artists/{}/related-artists".format(base_url, artist_id)
-    response = requests.get(endpoint, headers=auth_header)
-    data = json.loads(response.text)
-    related_artists = extract.related_artists(data)
-    return related_artists
+# # GET an artist's related artists
+# def get_related_artists(auth_header, artist_id):
+#     if artist_id is None:
+#         return None
+#     endpoint = "{}/artists/{}/related-artists".format(base_url, artist_id)
+#     response = requests.get(endpoint, headers=auth_header)
+#     data = json.loads(response.text)
+#     related_artists = extract.related_artists(data)
+#     return related_artists
 
 
-# GET the artist that a user has been listening to a lot recently (if there is one)
-def get_frequent_artist(auth_header, artist_id):
-    if artist_id is None:
-        return None
-    endpoint = "{}/artists/{}".format(base_url, artist_id)
-    response = requests.get(endpoint, headers=auth_header)
-    artist_name = json.loads(response.text)['name']
-    return artist_name
+# # GET the artist that a user has been listening to a lot recently (if there is one)
+# def get_frequent_artist(auth_header, artist_id):
+#     if artist_id is None:
+#         return None
+#     endpoint = "{}/artists/{}".format(base_url, artist_id)
+#     response = requests.get(endpoint, headers=auth_header)
+#     artist_name = json.loads(response.text)['name']
+#     return artist_name
 
 
 # GET the track ids from the user's recent listening history
@@ -246,29 +242,26 @@ def index():
 # Homepage of application
 @app.route("/welcome")
 def display_top_data():
-    # Obtain an access token either by generating a new one or retrieving from storage
-    f = open("token.txt", "r")
-    if os.stat("token.txt").st_size == 0:
+    access_token = request.cookies.get('token')
+    if access_token is None:
         access_token = generate_access_token()
-    else:
-        access_token = f.readline()
-
+    # Obtain an access token either by generating a new one or retrieving from storage
+    # f = open("token.txt", "r")
+    # if os.stat("token.txt").st_size == 0:
+    #     access_token = generate_access_token()
+    # else:
+    #     access_token = f.readline()
     # Use the token to get the necessary authorization header and access data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     recent_tracks_data = get_recent_tracks_data(auth_header, '50')
     recent_track_ids = get_recent_tracks_ids(auth_header, '50')
     track_images = get_track_images(auth_header, recent_track_ids)
 
-    # Render the HTML template accordingly based on wheter or not a "frequent artist" can be identified
-    if recent_tracks_data[1] is None:
-        return render_template("index.html", recent=recent_tracks_data[0], related=0, 
-                                images=track_images)
-    else:
-        related_artists = get_related_artists(auth_header, recent_tracks_data[1])
-        frequent_artist = get_frequent_artist(auth_header, recent_tracks_data[1])
-        return render_template("index.html", recent=recent_tracks_data[0], related=related_artists, 
-                                images=track_images, frequent=frequent_artist)
-
+    response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images))
+    response.set_cookie('token', access_token, max_age=3600)
+    return response
+    # Render HTML with the desired data
+    # return render_template("index.html", recent=recent_tracks_data, images=track_images)
 
 
 def model_predict(datapoints):
@@ -283,9 +276,10 @@ def model_predict(datapoints):
     df['Loudness'] = datapoints['loudness']
     df['Speechiness'] = datapoints['speechiness']
     xgb_loaded = pickle.load(open('xgb.pkl', 'rb'))
-    print(len(df.index))
     predictions = xgb_loaded.predict(df)
     return predictions
+
+    
 # Function that returns the image urls of the top tracks
 def get_top_track_images(auth_header, tracks):
     lst = []
