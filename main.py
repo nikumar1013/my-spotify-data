@@ -307,7 +307,7 @@ def display_top_data():
 
     # Store HTML rendering in a response and create a cookie for the access token
     response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images))
-    response.set_cookie('token', access_token)
+    response.set_cookie('token', access_token, max_age=3600)
     return response
 
 
