@@ -110,6 +110,8 @@ def get_recent_tracks_ids(auth_header, limit):
     result = ','.join(recent_track_ids)
     return result
 
+
+# GET the track ids for the user's top tracks
 def get_top_tracks_ids(auth_header, time_range, limit):
     endpoint = "{}/me/top/tracks?time_range={}&limit={}".format(base_url, time_range, limit) 
     response = requests.get(endpoint, headers=auth_header)
@@ -117,6 +119,7 @@ def get_top_tracks_ids(auth_header, time_range, limit):
     top_tracks_id = extract.top_track_ids(data)
     result = ','.join(top_tracks_id)
     return result
+
 
 # GET the artwork of tracks
 def get_track_images(auth_header, track_ids):
