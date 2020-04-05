@@ -80,9 +80,10 @@ def recent_tracks(data):
     num_listens = {}
     for item in data['items']:
         track_name = item['track']['name']
+        track_id = item['track']['id']
         artist_name = item['track']['artists'][0]['name']
         artist_id = item['track']['artists'][0]['id']
-        recents[track_name] = (artist_name, artist_id)
+        recents[(track_name, track_id)] = (artist_name, artist_id)
         if artist_id in num_listens:
             num_listens[artist_id] = num_listens[artist_id] + 1
         else:

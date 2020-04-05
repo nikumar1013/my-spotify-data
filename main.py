@@ -9,12 +9,14 @@ import seaborn as sns
 import pandas as pd
 import pickle
 from flask import Flask, request, redirect, g, render_template, Response, make_response
+from flask_caching import Cache
 from urllib.parse import quote
 from math import pi
 import numpy as np
 
 app = Flask(__name__)
-    
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
 # API Keys
 client_id = "26b7856504274aaf8e73196314a11837"
 client_secret = "090108ca091346288c6c27e0d0eec073"
@@ -169,7 +171,6 @@ def get_tracks_from_playlist(auth_header, list_id, person_type):
 def display_top_tracks(term_length):
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
-    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + access_token)
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     top_tracks_data = get_top_tracks_data(auth_header, term_length, '30')
     images = get_top_track_images(auth_header, top_tracks_data)
@@ -294,12 +295,16 @@ def index():
     # Redirects the user to the Spotify login page (first thing that happens upon app launch)
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query.items()])
     authorization = "{}/?{}".format(auth_url, url_args)
-    return redirect(authorization)
+    response = make_response(redirect(authorization))
+    response.set_cookie('token', 'deletion', max_age=0)
+    return response
 
 
 # Homepage of application
 @app.route("/welcome")
 def display_top_data():
+    with app.app_context():
+        cache.clear()
     # Get an access token from its cookie or generate one if it doesn't exist yet
     access_token = request.cookies.get('token')
     if access_token == None:
@@ -374,6 +379,7 @@ def display_top_tracks_by_artist_short_term():
 
 # Page for viewing an audio analysis graphS
 @app.route("/audio-analysis")
+@cache.cached(timeout=60)
 def audio_analysis():
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
