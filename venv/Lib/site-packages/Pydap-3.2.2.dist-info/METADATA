@@ -1,0 +1,72 @@
+Metadata-Version: 2.0
+Name: Pydap
+Version: 3.2.2
+Summary: An implementation of the Data Access Protocol.
+Home-page: http://pydap.org/
+Author: James Hiebert
+Author-email: james@hiebert.name
+License: MIT
+Keywords: opendap dods dap science data
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: numpy
+Requires-Dist: Webob
+Requires-Dist: Jinja2
+Requires-Dist: docopt
+Requires-Dist: six (>=1.4.0)
+Requires-Dist: beautifulsoup4
+Provides-Extra: cas
+Requires-Dist: requests; extra == 'cas'
+Requires-Dist: lxml; extra == 'cas'
+Provides-Extra: docs
+Requires-Dist: Sphinx; extra == 'docs'
+Requires-Dist: Pygments; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme; extra == 'docs'
+Provides-Extra: functions
+Requires-Dist: gsw (==3.0.6); extra == 'functions'
+Requires-Dist: coards; extra == 'functions'
+Provides-Extra: handlers.netcdf
+Requires-Dist: netCDF4; extra == 'handlers.netcdf'
+Requires-Dist: ordereddict; extra == 'handlers.netcdf'
+Provides-Extra: server
+Requires-Dist: gunicorn; extra == 'server'
+Requires-Dist: PasteDeploy; extra == 'server'
+Provides-Extra: testing
+Requires-Dist: gsw (==3.0.6); extra == 'testing'
+Requires-Dist: coards; extra == 'testing'
+Requires-Dist: requests; extra == 'testing'
+Requires-Dist: lxml; extra == 'testing'
+Requires-Dist: gunicorn; extra == 'testing'
+Requires-Dist: PasteDeploy; extra == 'testing'
+Requires-Dist: netCDF4; extra == 'testing'
+Requires-Dist: ordereddict; extra == 'testing'
+Requires-Dist: WebTest; extra == 'testing'
+Requires-Dist: beautifulsoup4; extra == 'testing'
+Requires-Dist: flake8; extra == 'testing'
+Requires-Dist: pytest (>=2.8); extra == 'testing'
+Requires-Dist: pytest-cov; extra == 'testing'
+Requires-Dist: pytest-attrib; extra == 'testing'
+Requires-Dist: mock; extra == 'testing'
+Requires-Dist: requests-mock; extra == 'testing'
+Requires-Dist: requests; extra == 'testing'
+Provides-Extra: tests
+Requires-Dist: gsw (==3.0.6); extra == 'tests'
+Requires-Dist: coards; extra == 'tests'
+Requires-Dist: requests; extra == 'tests'
+Requires-Dist: lxml; extra == 'tests'
+Requires-Dist: gunicorn; extra == 'tests'
+Requires-Dist: PasteDeploy; extra == 'tests'
+Requires-Dist: netCDF4; extra == 'tests'
+Requires-Dist: ordereddict; extra == 'tests'
+Requires-Dist: WebTest; extra == 'tests'
+Requires-Dist: beautifulsoup4; extra == 'tests'
+Requires-Dist: flake8; extra == 'tests'
+
+UNKNOWN
+
+

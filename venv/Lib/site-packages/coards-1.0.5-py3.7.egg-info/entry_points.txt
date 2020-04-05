@@ -1,0 +1,3 @@
+[console_scripts]
+coards = coards:main
+

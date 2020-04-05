@@ -1,0 +1,19 @@
+
+            [pydap.response]
+            das = pydap.responses.das:DASResponse
+            dds = pydap.responses.dds:DDSResponse
+            dods = pydap.responses.dods:DODSResponse
+            html = pydap.responses.html:HTMLResponse
+            asc = pydap.responses.ascii:ASCIIResponse
+            ascii = pydap.responses.ascii:ASCIIResponse
+            ver = pydap.responses.version:VersionResponse
+
+            [pydap.function]
+            bounds = pydap.wsgi.functions:bounds
+            mean = pydap.wsgi.functions:mean
+            density = pydap.wsgi.functions:density
+
+            [console_scripts]
+            pydap = pydap.wsgi.app:main
+            dods = pydap.handlers.dap:dump
+      
