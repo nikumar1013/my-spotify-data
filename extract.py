@@ -35,6 +35,12 @@ def recent_track_ids(data):
             tracks.append(track_id)
     return tracks
 
+def top_track_ids(data):
+    ids = []
+    for item in data['items']:
+        ids.append(item['id'])
+    return ids
+
 
 # Returns a list of urls for track artworks
 def track_images(data):

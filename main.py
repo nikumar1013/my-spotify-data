@@ -5,7 +5,6 @@ import extract
 import os
 import matplotlib
 import matplotlib.pyplot as plt
-import plotly.express as px
 import seaborn as sns
 import pandas as pd
 import pickle
@@ -109,6 +108,13 @@ def get_recent_tracks_ids(auth_header, limit):
     result = ','.join(recent_track_ids)
     return result
 
+def get_top_tracks_ids(auth_header, time_range, limit):
+    endpoint = "{}/me/top/tracks?time_range={}&limit={}".format(base_url, time_range, limit) 
+    response = requests.get(endpoint, headers=auth_header)
+    data = json.loads(response.text)
+    top_tracks_id = extract.top_track_ids(data)
+    result = ','.join(top_tracks_id)
+    return result
 
 # GET the artwork of tracks
 def get_track_images(auth_header, track_ids):
@@ -251,19 +257,17 @@ def make_radar_chart(predictions):
         else:
             stats[2] += 1
     stats = np.array(stats)
-    df = pd.DataFrame(dict(
-        r=stats,
-        theta=labels))
     angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
     stats = np.concatenate((stats,[stats[0]]))
     angles = np.concatenate((angles,[angles[0]]))
     fig = plt.figure()
-    ax = fig.add_subplot(111, polar=True)
-    ax.plot(angles, stats, 'o-', linewidth=2)
+    ax = fig.add_subplot(111, polar=True,facecolor='black',frameon=True)
+    ax.plot(angles, stats)
     ax.fill(angles, stats, alpha=0.25)
     ax.set_thetagrids(angles * 180/np.pi, labels)
     ax.set_title("Personality Graph")
-    ax.grid(True)
+    # ax.grid(True)
+    fig.set_size_inches(15, 7.5)   
     fig.savefig("static/images/personality.png")
 
 
@@ -420,7 +424,7 @@ def predict_personality():
     #     frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
     # result = pd.concat(frame_list)
     # result.to_csv(r'tracks.csv', index = False)
-    track_ids = get_recent_tracks_ids(auth_header, '50')
+    track_ids = get_top_tracks_ids(auth_header, 'long_term', '50')
     datapoints = do_audio_analysis(auth_header, track_ids)
     predictions = model_predict(datapoints)
     make_radar_chart(predictions)
