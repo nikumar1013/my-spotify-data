@@ -212,11 +212,11 @@ def do_audio_analysis(auth_header, track_ids):
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
-    df['Recent Songs'] = range(1, len(datapoints[tag]) + 1)
+    df['Top Song Number'] = range(1, len(datapoints[tag]) + 1)
     y_title = tag.capitalize()
     df[y_title] = datapoints[tag]
-    title = y_title + " ratings of your most recent songs"
-    sns_plot = sns.barplot(x="Recent Songs", y=y_title, data=df).set_title(title)
+    title = y_title + " ratings of your top songs!"
+    sns_plot = sns.barplot(x="Top Song Number", y=y_title, data=df).set_title(title)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)   
     fig.savefig('static/{t}.png'.format(t=tag))
@@ -384,7 +384,7 @@ def audio_analysis():
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    track_ids = get_recent_tracks_ids(auth_header, '50')
+    track_ids = get_top_tracks_ids(auth_header, 'long_term', '50')
     
     # Create a graph using datapoints
     datapoints = do_audio_analysis(auth_header, track_ids)
@@ -395,11 +395,13 @@ def audio_analysis():
         make_graph(datapoints, key)
 
     # Render HTML with the desired data
+    img_names = ['danceability.png','energy.png', 'instrumentalness.png','tempo.png']
     img_1_file = os.path.join(app.config['UPLOAD_FOLDER'], 'danceability.png')
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
     img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    return render_template("audioanalysis.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file)
+    response = make_response(render_template("audioanalysis.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file))
+    return response
 
 
 # Page for viewing a user's sentiment analysis
@@ -414,22 +416,23 @@ def predict_personality():
     Mellow/Chill/peaceful Type B = 1
     Submissive/conformist/passive  Type C = 2
     """
-    # frame_list = []
-    # # 476 songs
-    # outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
-    # # ~300 songs
-    # mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT', '37i9dQZF1DWXe9gFZP0gtP']
-    # # 413 songs
-    # passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro']
+    frame_list = []
+    # 476 songs
+    outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
+    # ~300 songs
+    mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT', '37i9dQZF1DWXe9gFZP0gtP', 
+    '37i9dQZF1DWZqd5JICZI0u', '17HYiAIcwlDEg5RgVkm4L7']
+    # 413 songs
+    passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro', '19Bsw8qePEz1l5kQ4jWUvw']
 
-    # for item in passive_list:
-    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
-    # for item in mellow_list:
-    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
-    # for item in outgoing_list:
-    #     frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
-    # result = pd.concat(frame_list)
-    # result.to_csv(r'tracks.csv', index = False)
+    for item in passive_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
+    for item in mellow_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
+    for item in outgoing_list:
+        frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
+    result = pd.concat(frame_list)
+    result.to_csv(r'tracks.csv', index = False)
     track_ids = get_top_tracks_ids(auth_header, 'long_term', '50')
     datapoints = do_audio_analysis(auth_header, track_ids)
     predictions = model_predict(datapoints)
