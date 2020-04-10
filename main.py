@@ -215,11 +215,11 @@ def do_audio_analysis(auth_header, track_ids):
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag):
     df = pd.DataFrame()
-    df['Top Song Number'] = range(1, len(datapoints[tag]) + 1)
+    df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
     y_title = tag.capitalize()
     df[y_title] = datapoints[tag]
     title = y_title + " ratings of your top songs!"
-    sns_plot = sns.barplot(x="Top Song Number", y=y_title, data=df).set_title(title)
+    sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)   
     fig.savefig('static/{t}.png'.format(t=tag))
@@ -251,7 +251,7 @@ def get_dataframe(auth_header, data, label):
 
 # Creates a radar chart
 def make_radar_chart(predictions):
-    labels = np.array(["Outgoing", "Mellow", "Introverted"])
+    labels = np.array(["Outgoing", "Mellow", "Solitary"])
     stats = [0, 0, 0]
     for num in predictions:
         if num == 2:
@@ -261,16 +261,29 @@ def make_radar_chart(predictions):
         else:
             stats[2] += 1
     stats = np.array(stats)
-    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
     stats = np.concatenate((stats,[stats[0]]))
-    angles = np.concatenate((angles,[angles[0]]))
-    fig = plt.figure()
-    ax = fig.add_subplot(111, polar=True, facecolor='black', frameon=True)
-    ax.plot(angles, stats)
-    ax.fill(angles, stats, 'red', alpha=0.25)
-    ax.set_thetagrids(angles * 180/np.pi, labels)
-    ax.set_title("Personality Graph")
-    # ax.grid(True)
+    N = len(labels)
+    angles = [n / float(N) * 2 * pi for n in range(N)]
+    angles += angles[:1]
+    my_dpi = 96
+    fig = plt.figure(figsize=(1000/my_dpi, 1000/my_dpi), dpi=my_dpi)
+
+    ax = fig.add_subplot(111,polar=True,facecolor='black', frameon=True)
+
+
+    ax.set_theta_offset(pi / 2)
+    ax.set_theta_direction(-1)
+
+    plt.xticks(angles[:-1], labels, color='black', size=8)
+
+    ax.set_rlabel_position(0)
+
+    ax.plot(angles,stats,color='green', linewidth=2, linestyle='solid')
+    ax.fill(angles,stats, color='green', alpha=0.4)
+
+    plt.title("Personality Graph", size=11, y=1.1)
+
+    
     fig.set_size_inches(15, 7.5)   
     fig.savefig("static/personality.png")
 
@@ -387,7 +400,7 @@ def audio_analysis():
     # Get the access token from its cookie and use it to access data
     access_token = request.cookies.get('token')
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    track_ids = get_top_tracks_ids(auth_header, 'long_term', '50')
+    track_ids = get_top_tracks_ids(auth_header, 'medium_term', '30')
     
     # Create a graph using datapoints
     datapoints = do_audio_analysis(auth_header, track_ids)
