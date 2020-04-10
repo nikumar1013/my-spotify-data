@@ -265,14 +265,14 @@ def make_radar_chart(predictions):
     stats = np.concatenate((stats,[stats[0]]))
     angles = np.concatenate((angles,[angles[0]]))
     fig = plt.figure()
-    ax = fig.add_subplot(111, polar=True,facecolor='black',frameon=True)
+    ax = fig.add_subplot(111, polar=True, facecolor='black', frameon=True)
     ax.plot(angles, stats)
-    ax.fill(angles, stats, alpha=0.25)
+    ax.fill(angles, stats, 'red', alpha=0.25)
     ax.set_thetagrids(angles * 180/np.pi, labels)
     ax.set_title("Personality Graph")
     # ax.grid(True)
     fig.set_size_inches(15, 7.5)   
-    fig.savefig("static/images/personality.png")
+    fig.savefig("static/personality.png")
 
 
 # Return predictions from the ML model
@@ -440,7 +440,8 @@ def predict_personality():
     datapoints = do_audio_analysis(auth_header, track_ids)
     predictions = model_predict(datapoints)
     make_radar_chart(predictions)
-    return render_template("person.html")
+    img_5_file = os.path.join(app.config['UPLOAD_FOLDER'], 'personality.png')
+    return render_template("personality.html", img_5 = img_5_file)
 
 
 # Logs the user out of the application
