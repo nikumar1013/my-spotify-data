@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import pickle
+import numpy as np
 from flask import Flask, request, redirect, g, render_template, Response, make_response
 from flask_caching import Cache
 from urllib.parse import quote
 from math import pi
-import numpy as np
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -267,23 +267,14 @@ def make_radar_chart(predictions):
     angles += angles[:1]
     my_dpi = 96
     fig = plt.figure(figsize=(1000/my_dpi, 1000/my_dpi), dpi=my_dpi)
-
     ax = fig.add_subplot(111,polar=True,facecolor='black', frameon=True)
-
-
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
-
     plt.xticks(angles[:-1], labels, color='black', size=8)
-
     ax.set_rlabel_position(0)
-
     ax.plot(angles,stats,color='green', linewidth=2, linestyle='solid')
     ax.fill(angles,stats, color='green', alpha=0.4)
-
     plt.title("Personality Graph", size=11, y=1.1)
-
-    
     fig.set_size_inches(15, 7.5)   
     fig.savefig("static/personality.png")
 
