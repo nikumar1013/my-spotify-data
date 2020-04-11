@@ -1,3 +1,4 @@
+# Author: Abhijit Raman
 import pandas as pd
 import numpy as np
 import pickle
@@ -5,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-#trying the Decision tree
 
 data = pd.read_csv('tracks.csv')
 

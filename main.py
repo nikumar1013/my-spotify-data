@@ -31,9 +31,7 @@ redirect_uri = "http://127.0.0.1:8080/welcome"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # Image folder configuration
-CUR_DIR = os.getcwd()
-IMG_DIR = os.path.join(CUR_DIR, "/templates/images/energy.jpg")
-app.config['UPLOAD_FOLDER'] = "/static/"
+app.config['UPLOAD_FOLDER'] = "/static/graphs/"
 
 # Query parameters for authorization
 auth_query = {
@@ -222,7 +220,7 @@ def make_graph(datapoints, tag):
     sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)   
-    fig.savefig('static/{t}.png'.format(t=tag))
+    fig.savefig('static/graphs/{t}.png'.format(t=tag))
 
 
 # Returns a pandas dataframe containing data from the audio analysis
@@ -276,7 +274,7 @@ def make_radar_chart(predictions):
     ax.fill(angles,stats, color='green', alpha=0.4)
     plt.title("Personality Graph", size=11, y=1.1)
     fig.set_size_inches(15, 7.5)   
-    fig.savefig("static/personality.png")
+    fig.savefig("static/graphs/personality.png")
 
 
 # Return predictions from the ML model

@@ -1,5 +1,4 @@
 # Authors: Nikhil Kumar, Abhijit Raman, Nicholas Wille
-
 import json
 
 # Returns a list of the user's top 10 artists
