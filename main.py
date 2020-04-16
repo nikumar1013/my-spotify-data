@@ -462,8 +462,6 @@ def disable_cache(r):
 
 
 # Run the server
-if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=80)
-    # app.run(debug=True, port=8080)
-    # app.run(debug=False)
-    app.run()
+# if __name__ == "__main__":
+#     app.run(debug=True, port=8080)
+
