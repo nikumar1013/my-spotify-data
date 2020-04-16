@@ -31,7 +31,7 @@ redirect_uri = "http://127.0.0.1:8000/welcome"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # Image folder configuration
-app.config['UPLOAD_FOLDER'] = "/static/graphs/"
+app.config['UPLOAD_FOLDER'] = "/static/"
 
 # Query parameters for authorization
 auth_query = {
@@ -220,7 +220,7 @@ def make_graph(datapoints, tag):
     sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
     fig = sns_plot.get_figure()
     fig.set_size_inches(15, 7.5)   
-    fig.savefig('static/graphs/{t}.png'.format(t=tag))
+    fig.savefig('static/{t}.png'.format(t=tag))
 
 
 # Returns a pandas dataframe containing data from the audio analysis
@@ -274,7 +274,7 @@ def make_radar_chart(predictions):
     ax.fill(angles,stats, color='green', alpha=0.4)
     plt.title("Personality Graph", size=11, y=1.1)
     fig.set_size_inches(15, 7.5)   
-    fig.savefig("static/graphs/personality.png")
+    fig.savefig("static/personality.png")
 
 
 # Return predictions from the ML model
@@ -382,7 +382,7 @@ def display_top_tracks_by_artist_short_term():
     return render_template("toptracksbyartist.html", content=data[0], images=data[1])
 
 
-# Page for viewing an audio analysis graphS
+# Page for viewing an audio analysis graphs
 @app.route("/audio-analysis")
 @cache.cached(timeout=60)
 def audio_analysis():
