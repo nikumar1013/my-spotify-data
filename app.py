@@ -27,7 +27,7 @@ token_url = "https://accounts.spotify.com/api/token"
 base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
-redirect_uri = "http://127.0.0.1:8000/home"
+redirect_uri = "https://myspotifydata.azurewebsites.net/home"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # Image folder configuration
