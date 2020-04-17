@@ -30,6 +30,9 @@ base_url = "https://api.spotify.com/v1"
 redirect_uri = "https://myspotifydata.azurewebsites.net/home"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
+# UNCOMMENT TO USE FOR LOCAL TESTING
+# redirect_uri = "http://127.0.0.1:8000/home"
+
 # Image folder configuration
 app.config['UPLOAD_FOLDER'] = "/static/"
 
@@ -289,7 +292,7 @@ def model_predict(datapoints):
     df['Liveness'] = datapoints['liveness']
     df['Loudness'] = datapoints['loudness']
     df['Speechiness'] = datapoints['speechiness']
-    xgb_loaded = pickle.load(open('xgb.pkl', 'rb'))
+    xgb_loaded = pickle.load(open(r"ml/xgb.pkl", 'rb'))
     predictions = xgb_loaded.predict(df)
     return predictions
 
@@ -315,7 +318,7 @@ def display_top_data():
     if access_token == None:
         access_token = generate_access_token()
 
-    # Use the token to get the necessary authorization header and access data
+    # Use the token to get the necessary authorization header and then obtain data
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     recent_tracks_data = get_recent_tracks_data(auth_header, '50')
     recent_track_ids = get_recent_tracks_ids(auth_header, '50')
@@ -384,14 +387,14 @@ def display_top_tracks_by_artist_short_term():
 
 # Page for viewing an audio analysis graphs
 @app.route("/audio-analysis")
-@cache.cached(timeout=60)
+@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def audio_analysis():
-    # Get the access token from its cookie and use it to access data
+    # Retrieve access token and retrive track IDs
     access_token = request.cookies.get('token')
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     track_ids = get_top_tracks_ids(auth_header, 'medium_term', '30')
     
-    # Create a graph using datapoints
+    # Generate graphs using datapoints to display on audio analysis page
     datapoints = do_audio_analysis(auth_header, track_ids)
     matplotlib.use('Agg')
     matplotlib.style.use('ggplot')
@@ -405,45 +408,50 @@ def audio_analysis():
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
     img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
     img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    response = make_response(render_template("audioanalysis.html", img_1 = img_1_file, img_2 = img_2_file, img_3 = img_3_file, img_4 = img_4_file))
-    return response
+    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_3=img_3_file, 
+                            img_4=img_4_file)
 
 
 # Page for viewing a user's sentiment analysis
 @app.route("/personality-analysis")
+@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def predict_personality():
+    # Retrieve access token and provide authorization header
     access_token = request.cookies.get('token')
-
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    """
-    3 Personality types instead of 5 
-    Outgoing/extraversion/energetic Type A - 0
-    Mellow/Chill/peaceful Type B = 1
-    Submissive/conformist/passive  Type C = 2
-    """
-    frame_list = []
-    # 476 songs
-    outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi','37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
-    # ~300 songs
-    mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT', '37i9dQZF1DWXe9gFZP0gtP', 
-    '37i9dQZF1DWZqd5JICZI0u', '17HYiAIcwlDEg5RgVkm4L7']
-    # 413 songs
-    passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro', '19Bsw8qePEz1l5kQ4jWUvw']
 
+    # Lists of playlists with which to build model
+    frame_list = []
+
+    outgoing_list = ['37i9dQZF1DX3rxVfibe1L0', '37i9dQZF1DX6GwdWRQMQpq','37i9dQZF1DXdVbxH0H5oTi',
+                     '37i9dQZF1DXdPec7aLTmlC', '37i9dQZF1DWSf2RDTDayIx', '37i9dQZF1DX7KNKjOK0o75']
+
+    mellow_list = ['37i9dQZF1DX6ziVCJnEm59', '37i9dQZF1DWSiZVO2J6WeI', '37i9dQZF1DX4E3UdUs7fUx', 
+                   '37i9dQZF1DWYiR2Uqcon0X', '37i9dQZF1DWUvQoIOFMFUT', '37i9dQZF1DWXe9gFZP0gtP', 
+                   '37i9dQZF1DWZqd5JICZI0u', '17HYiAIcwlDEg5RgVkm4L7']
+
+    passive_list = ['37i9dQZF1DX3YSRoSdA634','37i9dQZF1DX7gIoKXt0gmx','37i9dQZF1DWX83CujKHHOn', 
+                    '37i9dQZF1DWSqBruwoIXkA', '37i9dQZF1DWVrtsSlLKzro', '19Bsw8qePEz1l5kQ4jWUvw']
+
+    # Iterate through our playlists and retrieve their songs
     for item in passive_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 2))
     for item in mellow_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 1))
     for item in outgoing_list:
         frame_list.append(get_tracks_from_playlist(auth_header, item, 0))
+    
+    # Generate csv file using collected data
     result = pd.concat(frame_list)
-    result.to_csv(r'tracks.csv', index = False)
+    result.to_csv(r"ml/tracks.csv", index=False)
     track_ids = get_top_tracks_ids(auth_header, 'long_term', '50')
     datapoints = do_audio_analysis(auth_header, track_ids)
     predictions = model_predict(datapoints)
+
+    # Generate a radar chart and display it to the screen
     make_radar_chart(predictions)
     img_5_file = os.path.join(app.config['UPLOAD_FOLDER'], 'personality.png')
-    return render_template("personality.html", img_5 = img_5_file)
+    return render_template("personality.html", img_5=img_5_file)
 
 
 # Logs the user out of the application
@@ -452,7 +460,7 @@ def logout():
     return redirect("https://www.spotify.com/logout/")
 
 
-# Disables image caching
+# This is done in order to prevent the browser from caching images
 @app.after_request
 def disable_cache(r):
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
@@ -461,7 +469,6 @@ def disable_cache(r):
     return r
 
 
-# # Run the server
+# Run the server (uncomment for local testing)
 # if __name__ == "__main__":
 #     app.run(debug=True, port=8000)
-

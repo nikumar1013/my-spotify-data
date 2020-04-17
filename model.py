@@ -32,7 +32,7 @@ xgb.fit(X_train, y_train)
 
 print("XGBoost classifier score : {}", xgb.score(X_test,y_test))
 
-filename = 'xgb.pkl'
+filename = '/ml/xgb.pkl'
 model_pkl = open(filename, 'wb')
 pickle.dump(xgb, model_pkl)
 model_pkl.close()
