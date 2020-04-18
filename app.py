@@ -27,11 +27,11 @@ token_url = "https://accounts.spotify.com/api/token"
 base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
-redirect_uri = "https://myspotifydata.azurewebsites.net/home"
+#redirect_uri = "https://myspotifydata.azurewebsites.net/home"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # UNCOMMENT TO USE FOR LOCAL TESTING
-#redirect_uri = "http://127.0.0.1:8000/home"
+redirect_uri = "http://127.0.0.1:8000/home"
 
 # Image folder configuration
 app.config['UPLOAD_FOLDER'] = "/static/"
@@ -216,7 +216,7 @@ def do_audio_analysis(auth_header, track_ids):
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag, excluded):
     if tag not in excluded:
-       # plt.clf()
+        plt.figure()
         df = pd.DataFrame()
         df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
         y_title = tag.capitalize()
@@ -255,7 +255,7 @@ def get_dataframe(auth_header, data, label):
 
 # Creates a radar chart
 def make_radar_chart(predictions):
-   # plt.clf()
+    plt.figure()
     labels = np.array(["Outgoing", "Mellow", "Solitary"])
     stats = [0, 0, 0]
     for num in predictions:
@@ -272,7 +272,7 @@ def make_radar_chart(predictions):
     angles += angles[:1]
     my_dpi = 96
     fig = plt.figure(figsize=(1000/my_dpi, 1000/my_dpi), dpi=my_dpi)
-    ax = fig.add_subplot(111,polar=True,facecolor='black', frameon=True)
+    ax = fig.add_subplot(111, polar=True, facecolor='black', frameon=True)
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
     plt.xticks(angles[:-1], labels, color='black', size=8)
@@ -392,7 +392,7 @@ def display_top_tracks_by_artist_short_term():
 
 # Page for viewing an audio analysis graphs
 @app.route("/audio-analysis")
-#@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
+@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def audio_analysis():
     # Retrieve access token and retrive track IDs
     access_token = request.cookies.get('token')
@@ -419,7 +419,7 @@ def audio_analysis():
 
 # Page for viewing a user's sentiment analysis
 @app.route("/personality-analysis")
-#@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
+@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def predict_personality():
     # Retrieve access token and provide authorization header
     access_token = request.cookies.get('token')
@@ -474,6 +474,6 @@ def logout():
 #     return r
 
 
-# # Run the server (uncomment for local testing)
-# if __name__ == "__main__":
-#    app.run(debug=True, port=8000)
+# Run the server (uncomment for local testing)
+if __name__ == "__main__":
+   app.run(debug=True, port=8000)
