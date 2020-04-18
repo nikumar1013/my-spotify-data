@@ -214,16 +214,17 @@ def do_audio_analysis(auth_header, track_ids):
 
 
 # Graph data using matplotlib and seaborne
-def make_graph(datapoints, tag):
-    df = pd.DataFrame()
-    df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
-    y_title = tag.capitalize()
-    df[y_title] = datapoints[tag]
-    title = y_title + " ratings of your top songs!"
-    sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
-    fig = sns_plot.get_figure()
-    fig.set_size_inches(15, 7.5)   
-    fig.savefig('static/{t}.png'.format(t=tag))
+def make_graph(datapoints, tag, excluded):
+    if tag in excluded:
+        df = pd.DataFrame()
+        df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
+        y_title = tag.capitalize()
+        df[y_title] = datapoints[tag]
+        title = y_title + " ratings of your top songs!"
+        sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
+        fig = sns_plot.get_figure()
+        fig.set_size_inches(15, 7.5)   
+        fig.savefig('static/{t}.png'.format(t=tag))
 
 
 # Returns a pandas dataframe containing data from the audio analysis
@@ -387,7 +388,7 @@ def display_top_tracks_by_artist_short_term():
 
 # Page for viewing an audio analysis graphs
 @app.route("/audio-analysis")
-@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
+#@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def audio_analysis():
     # Retrieve access token and retrive track IDs
     access_token = request.cookies.get('token')
@@ -399,8 +400,9 @@ def audio_analysis():
     matplotlib.use('Agg')
     matplotlib.style.use('ggplot')
     sns.set_style('dark')
+    excluded = set(["speechiness", "loudness", "acousticness", "liveness"])
     for key in datapoints:
-        make_graph(datapoints, key)
+        make_graph(datapoints, key, excluded)
 
     # Render HTML with the desired data
     img_names = ['danceability.png','energy.png', 'instrumentalness.png','tempo.png']
@@ -413,7 +415,7 @@ def audio_analysis():
 
 # Page for viewing a user's sentiment analysis
 @app.route("/personality-analysis")
-@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
+#@cache.cached(timeout=3600) # Caches the HTML on this view for fast reload speed
 def predict_personality():
     # Retrieve access token and provide authorization header
     access_token = request.cookies.get('token')
@@ -459,13 +461,13 @@ def logout():
     return redirect("https://www.spotify.com/logout/")
 
 
-# This is done in order to prevent the browser from caching images
-@app.after_request
-def disable_cache(r):
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    return r
+# # This is done in order to prevent the browser from caching images
+# @app.after_request
+# def disable_cache(r):
+#     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
+#     r.headers["Pragma"] = "no-cache"
+#     r.headers["Expires"] = "0"
+#     return r
 
 
 # # Run the server (uncomment for local testing)
