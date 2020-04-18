@@ -467,13 +467,13 @@ def logout():
     return redirect("https://www.spotify.com/logout/")
 
 
-# # This is done in order to prevent the browser from caching images
-# @app.after_request
-# def disable_cache(r):
-#     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
-#     r.headers["Pragma"] = "no-cache"
-#     r.headers["Expires"] = "0"
-#     return r
+# This is done in order to prevent the browser from caching images
+@app.after_request
+def disable_cache(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate public, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
 # # Run the server (uncomment for local testing)
