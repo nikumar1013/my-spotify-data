@@ -31,7 +31,7 @@ redirect_uri = "https://myspotifydata.azurewebsites.net/home"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # UNCOMMENT TO USE FOR LOCAL TESTING
-# redirect_uri = "http://127.0.0.1:8000/home"
+#redirect_uri = "http://127.0.0.1:8000/home"
 
 # Image folder configuration
 app.config['UPLOAD_FOLDER'] = "/static/"
@@ -407,9 +407,8 @@ def audio_analysis():
     img_1_file = os.path.join(app.config['UPLOAD_FOLDER'], 'danceability.png')
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
     img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
-    img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_3=img_3_file, 
-                            img_4=img_4_file)
+    #img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
+    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_3=img_3_file)
 
 
 # Page for viewing a user's sentiment analysis
