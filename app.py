@@ -216,6 +216,7 @@ def do_audio_analysis(auth_header, track_ids):
 # Graph data using matplotlib and seaborne
 def make_graph(datapoints, tag, excluded):
     if tag in excluded:
+        plt.clf()
         df = pd.DataFrame()
         df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
         y_title = tag.capitalize()
@@ -225,6 +226,7 @@ def make_graph(datapoints, tag, excluded):
         fig = sns_plot.get_figure()
         fig.set_size_inches(15, 7.5)   
         fig.savefig('static/{t}.png'.format(t=tag))
+        plt.clf()
 
 
 # Returns a pandas dataframe containing data from the audio analysis
@@ -253,6 +255,7 @@ def get_dataframe(auth_header, data, label):
 
 # Creates a radar chart
 def make_radar_chart(predictions):
+    plt.clf()
     labels = np.array(["Outgoing", "Mellow", "Solitary"])
     stats = [0, 0, 0]
     for num in predictions:
@@ -279,6 +282,7 @@ def make_radar_chart(predictions):
     plt.title("Personality Graph", size=11, y=1.1)
     fig.set_size_inches(15, 7.5)   
     fig.savefig("static/personality.png")
+    plt.clf()
 
 
 # Return predictions from the ML model
