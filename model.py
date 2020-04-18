@@ -4,10 +4,11 @@ import numpy as np
 import pickle
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-data = pd.read_csv('tracks.csv')
+data = pd.read_csv('ml/tracks.csv')
 
 Y = data['Label']
 
@@ -15,25 +16,15 @@ data = data.drop('Label', axis=1)
 
 X = data
 
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.30, random_state=0, stratify=Y)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=0, stratify=Y)
 
-xgb = XGBClassifier(
-	learning_rate=0.15,
-	n_estimators=1000,
-	max_depth=6,
-	min_child_weight=1,
-	gamma=0,
-	subsample=.8,
-	colsample_bytree=.8,
-	objective="binary:logistic",
-	nthread=4
-	)
-xgb.fit(X_train, y_train)
 
-print("XGBoost classifier score : {}", xgb.score(X_test,y_test))
+clf = DecisionTreeClassifier(random_state=0, max_depth=15)
+clf.fit(X_train, y_train)
+print("DecisionTree Classifier  score : {}", clf.score(X_test,y_test))
 
-filename = '/ml/xgb.pkl'
+filename = 'ml/dtc.pkl'
 model_pkl = open(filename, 'wb')
-pickle.dump(xgb, model_pkl)
+pickle.dump(clf, model_pkl)
 model_pkl.close()
-s = pickle.dumps(xgb)
+s = pickle.dumps(clf)

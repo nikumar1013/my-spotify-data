@@ -292,7 +292,7 @@ def model_predict(datapoints):
     df['Liveness'] = datapoints['liveness']
     df['Loudness'] = datapoints['loudness']
     df['Speechiness'] = datapoints['speechiness']
-    xgb_loaded = pickle.load(open(r"ml/xgb.pkl", 'rb'))
+    xgb_loaded = pickle.load(open(r"ml/dtc.pkl", 'rb'))
     predictions = xgb_loaded.predict(df)
     return predictions
 
