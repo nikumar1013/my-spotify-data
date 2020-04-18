@@ -222,6 +222,8 @@ def make_graph(datapoints, tag, excluded):
         y_title = tag.capitalize()
         df[y_title] = datapoints[tag]
         title = y_title + " ratings of your top songs!"
+        if tag == "instrumentalness":
+            print(df)
         sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
         fig = sns_plot.get_figure()
         fig.set_size_inches(15, 7.5)   
@@ -412,9 +414,9 @@ def audio_analysis():
     img_names = ['danceability.png','energy.png', 'instrumentalness.png','tempo.png']
     img_1_file = os.path.join(app.config['UPLOAD_FOLDER'], 'danceability.png')
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
-    img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
-    #img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_3=img_3_file)
+    #img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
+    img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
+    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_4 = img_4_file)
 
 
 # Page for viewing a user's sentiment analysis
