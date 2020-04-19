@@ -29,12 +29,12 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
     
     
     '''
-    # Redirect uri and authorization scopes
-    redirect_uri = "https://myspotifydata.azurewebsites.net/home"
-    scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
+       Redirect uri and authorization scopes
+      redirect_uri = "https://myspotifydata.azurewebsites.net/home"
+      scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
-    # UNCOMMENT TO USE FOR LOCAL TESTING
-    # redirect_uri = "http://127.0.0.1:8000/home"
+    
+      redirect_uri = "http://127.0.0.1:8000/home"
     '''
     
    
