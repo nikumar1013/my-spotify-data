@@ -27,11 +27,11 @@ token_url = "https://accounts.spotify.com/api/token"
 base_url = "https://api.spotify.com/v1"
 
 # Redirect uri and authorization scopes
-redirect_uri = "https://myspotifydata.azurewebsites.net/home"
+# redirect_uri = "https://myspotifydata.azurewebsites.net/home"
 scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
 
 # UNCOMMENT TO USE FOR LOCAL TESTING
-#redirect_uri = "http://127.0.0.1:8000/home"
+redirect_uri = "http://127.0.0.1:8000/home"
 
 # Image folder configuration
 app.config['UPLOAD_FOLDER'] = "/static/"
@@ -221,9 +221,7 @@ def make_graph(datapoints, tag, excluded):
         df['Top Songs Ranked by Number'] = range(1, len(datapoints[tag]) + 1)
         y_title = tag.capitalize()
         df[y_title] = datapoints[tag]
-        title = y_title + " ratings of your top songs!"
-        if tag == "instrumentalness":
-            print(df)
+        title = y_title + " ratings of your top songs"
         sns_plot = sns.barplot(x="Top Songs Ranked by Number", y=y_title, data=df).set_title(title)
         fig = sns_plot.get_figure()
         fig.set_size_inches(15, 7.5)   
@@ -299,8 +297,8 @@ def model_predict(datapoints):
     df['Liveness'] = datapoints['liveness']
     df['Loudness'] = datapoints['loudness']
     df['Speechiness'] = datapoints['speechiness']
-    xgb_loaded = pickle.load(open(r"ml/dtc.pkl", 'rb'))
-    predictions = xgb_loaded.predict(df)
+    dtc_loaded = pickle.load(open(r"ml/dtc.pkl", 'rb'))
+    predictions = dtc_loaded.predict(df)
     return predictions
 
 
@@ -414,9 +412,8 @@ def audio_analysis():
     img_names = ['danceability.png','energy.png', 'instrumentalness.png','tempo.png']
     img_1_file = os.path.join(app.config['UPLOAD_FOLDER'], 'danceability.png')
     img_2_file = os.path.join(app.config['UPLOAD_FOLDER'], 'energy.png')
-    #img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'instrumentalness.png')
-    img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
-    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_4 = img_4_file)
+    img_3_file = os.path.join(app.config['UPLOAD_FOLDER'], 'tempo.png')
+    return render_template("audioanalysis.html", img_1=img_1_file, img_2=img_2_file, img_3=img_3_file)
 
 
 # Page for viewing a user's sentiment analysis
@@ -457,8 +454,8 @@ def predict_personality():
 
     # Generate a radar chart and display it to the screen
     make_radar_chart(predictions)
-    img_5_file = os.path.join(app.config['UPLOAD_FOLDER'], 'personality.png')
-    return render_template("personality.html", img_5=img_5_file)
+    img_4_file = os.path.join(app.config['UPLOAD_FOLDER'], 'personality.png')
+    return render_template("personality.html", img_4=img_4_file)
 
 
 # Logs the user out of the application
@@ -476,6 +473,6 @@ def disable_cache(r):
     return r
 
 
-# # Run the server (uncomment for local testing)
-# if __name__ == "__main__":
-#    app.run(debug=True, port=8000)
+# Run the server (uncomment for local testing)
+if __name__ == "__main__":
+   app.run(debug=True, port=8000)

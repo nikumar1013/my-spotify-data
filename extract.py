@@ -34,6 +34,7 @@ def recent_track_ids(data):
             tracks.append(track_id)
     return tracks
 
+# Returns a list of track ids from the user's top songs
 def top_track_ids(data):
     ids = []
     for item in data['items']:
@@ -87,7 +88,6 @@ def recent_tracks(data):
             num_listens[artist_id] = num_listens[artist_id] + 1
         else:
             num_listens[artist_id] = 1
-    # trending_id = trending_artist(num_listens)
     return recents
 
 
