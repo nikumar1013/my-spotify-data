@@ -25,6 +25,9 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
     client_secret = "INSERT_CLIENT_SECRET_KEY_HERE"
     '''
     
+  - Uncomment the local redirect url and comment out the azurewebsites redirect urls, it should look like this when finished.
+    
+    
     '''
     # Redirect uri and authorization scopes
     redirect_uri = "https://myspotifydata.azurewebsites.net/home"
@@ -34,7 +37,7 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
     # redirect_uri = "http://127.0.0.1:8000/home"
     '''
     
-   - Uncomment the local redirect url and comment out the azurewebsites redirect urls, it should look like this when finished.
+   
     
     '''
     # Redirect uri and authorization scopes
