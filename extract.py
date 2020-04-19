@@ -34,6 +34,7 @@ def recent_track_ids(data):
             tracks.append(track_id)
     return tracks
 
+
 # Returns a list of track ids from the user's top songs
 def top_track_ids(data):
     ids = []
@@ -45,11 +46,14 @@ def top_track_ids(data):
 # Returns a list of urls for track artworks
 def track_images(data):
     images = []
+    uris = []
     try:
         for item in data['tracks']:
             image = item['album']['images'][0]['url']
             images.append(image)
-        return images
+            uri = item['uri']
+            uris.append(uri)
+        return (images, uris)
     except:
         if data['error']:
             error = data['error']
@@ -61,11 +65,15 @@ def track_images(data):
 # Returns a list of urls for artist profile images
 def artist_images(data):
     images = []
+    uris = []
     try:
         for item in data['artists']:
             image = item['images'][0]['url']
             images.append(image)
-        return images
+            uri = item['uri']
+            uris.append(uri)
+        print(uris)
+        return (images, uris)
     except:
         if data['error']:
             error = data['error']

@@ -330,7 +330,7 @@ def display_top_data():
     track_images = get_track_images(auth_header, recent_track_ids)
 
     # Store HTML rendering in a response and create a cookie for the access token
-    response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images))
+    response = make_response(render_template("index.html", recent=recent_tracks_data, images=track_images[0], links=track_images[1]))
     response.set_cookie('token', access_token, max_age=3600)
     return response
 
@@ -339,55 +339,55 @@ def display_top_data():
 @app.route("/top-tracks-short-term")
 def display_top_tracks_short_term():
     data = display_top_tracks('short_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="active", 
-                            med_link_status="", long_link_status="") 
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1][0], short_link_status="active", 
+                            med_link_status="", long_link_status="", links=data[1][1]) 
 
 
 # Page for viewing top tracks in the past 6 months
 @app.route("/top-tracks-medium-term")
 def display_top_tracks_medium_term():
     data = display_top_tracks('medium_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", 
-                            med_link_status="active", long_link_status="") 
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1][0], short_link_status="", 
+                            med_link_status="active", long_link_status="", links=data[1][1]) 
 
 
 # Page for viewing all time top tracks
 @app.route("/top-tracks-long-term")
 def display_top_tracks_long_term():
     data = display_top_tracks('long_term')
-    return render_template("toptracks.html", top_tracks=data[0], images=data[1], short_link_status="", 
-                            med_link_status="", long_link_status="active") 
+    return render_template("toptracks.html", top_tracks=data[0], images=data[1][0], short_link_status="", 
+                            med_link_status="", long_link_status="active", links=data[1][1]) 
 
 
 # Page for viewing top artists in the past month
 @app.route("/top-artists-short-term")
 def display_top_artists_short_term():
     data = display_top_artists('short_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="active", 
-                            med_link_status="", long_link_status="") 
+    return render_template("topartists.html", top_artists=data[0], images=data[1][0], short_link_status="active", 
+                            med_link_status="", long_link_status="", links=data[1][1]) 
 
 
 # Page for viewing top artists in the past 6 months
 @app.route("/top-artists-medium-term")
 def display_top_artists_medium_term():
     data = display_top_artists('medium_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="", 
-                            med_link_status="active", long_link_status="") 
+    return render_template("topartists.html", top_artists=data[0], images=data[1][0], short_link_status="", 
+                            med_link_status="active", long_link_status="", links=data[1][1]) 
 
 
 # Page for viewing all time top artists
 @app.route("/top-artists-long-term")
 def display_top_artists_long_term():
     data = display_top_artists('long_term')
-    return render_template("topartists.html", top_artists=data[0], images=data[1], short_link_status="", 
-                            med_link_status="", long_link_status="active") 
+    return render_template("topartists.html", top_artists=data[0], images=data[1][0], short_link_status="", 
+                            med_link_status="", long_link_status="active", links=data[1][1]) 
 
 
 # Page for viewing top tracks grouped by artist
 @app.route("/top-tracks-by-artist")
 def display_top_tracks_by_artist_short_term():
     data = display_top_tracks_by_artist('short_term')
-    return render_template("toptracksbyartist.html", content=data[0], images=data[1])
+    return render_template("toptracksbyartist.html", content=data[0], images=data[1][0], links=data[1][1])
 
 
 # Page for viewing an audio analysis graphs
