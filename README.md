@@ -17,7 +17,13 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
    - You must make a few changes to the code before attempting to run it locally, the following changes are at the beginning of app.py.
    
    
-   - Modify the client id and client secret variables at the beginning of app.py to reflect your own client id and secret key which you can get from the spotify developer webiste
+   - Modify the client id and client secret variables at the beginning of app.py to reflect your own client id and secret key which you can get from the spotify developer webiste, shown below.
+   
+    '''
+    # API Keys
+    client_id = "INSERT_CLIENT_ID_HERE"
+    client_secret = "INSERT_CLIENT_SECRET_KEY_HERE"
+    '''
     
     '''
     # Redirect uri and authorization scopes
