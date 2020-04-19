@@ -12,12 +12,11 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
 
 
 ## Run Commands
-   ## How to run locally
    
-   - You must make a few changes to the code before attempting to run it locally, the following changes are at the beginning of app.py.
+  - You must make a few changes to the code before attempting to run it locally, the following changes are at the beginning of app.py.
    
    
-   - Modify the client id and client secret variables at the beginning of app.py to reflect your own client id and secret key which you can get from the spotify developer webiste, shown below.
+  - Modify the client id and client secret variables at the beginning of app.py to reflect your own client id and secret key which you can get from the spotify developer webiste, shown below.
    
     '''
     # API Keys
@@ -25,15 +24,13 @@ Utilizes the Spotify Web API for authentication and data collection, and uses sk
     client_secret = "INSERT_CLIENT_SECRET_KEY_HERE"
     '''
     
-  - Uncomment the local redirect url and comment out the azurewebsites redirect urls, it should look like this when finished.
+ - Uncomment the local redirect url and comment out the azurewebsites redirect urls, it should look like this when finished.
     
-    
+  
     '''
-       Redirect uri and authorization scopes
+      Redirect uri and authorization scopes
       redirect_uri = "https://myspotifydata.azurewebsites.net/home"
       scope = "user-top-read user-read-recently-played playlist-read-collaborative playlist-read-private"
-
-    
       redirect_uri = "http://127.0.0.1:8000/home"
     '''
     
