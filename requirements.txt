@@ -31,4 +31,3 @@ soupsieve==2.0
 urllib3==1.25.8
 WebOb==1.8.6
 Werkzeug==1.0.1
-xgboost==1.0.2
